@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>潮流商城 - TrendShop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #f5f5f7; }
+
+        /* 顶部公告栏 */
+        .announcement-bar {
+            background: linear-gradient(90deg, #1a1a2e, #16213e, #0f3460, #16213e, #1a1a2e);
+            background-size: 200% 100%;
+            animation: announceShimmer 4s ease infinite;
+        }
+        @keyframes announceShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* 导航栏 */
+        .nav-glass {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+
+        /* Hero 区域 */
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,107,107,0.3) 0%, transparent 70%);
+            top: -200px; right: -100px;
+            animation: floatBubble 8s ease-in-out infinite;
+        }
+        .hero-gradient::after {
+            content: '';
+            position: absolute;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(78,205,196,0.25) 0%, transparent 70%);
+            bottom: -100px; left: -50px;
+            animation: floatBubble 10s ease-in-out infinite reverse;
+        }
+        @keyframes floatBubble {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.1); }
+            66% { transform: translate(-20px, 15px) scale(0.9); }
+        }
+
+        /* 产品卡片 */
+        .product-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.04);
+            position: relative;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.06);
+        }
+        .product-card .img-wrap {
+            overflow: hidden;
+            position: relative;
+        }
+        .product-card .img-wrap img {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-card:hover .img-wrap img {
+            transform: scale(1.08);
+        }
+        .product-card .quick-view {
+            position: absolute;
+            bottom: 12px; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(0,0,0,0.75);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .product-card:hover .quick-view {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 标签 */
+        .badge-hot {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .badge-new {
+            background: linear-gradient(135deg, #0be881, #05c46b);
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* 分类标签 */
+        .category-chip {
+            padding: 8px 20px;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #e0e0e0;
+            background: #fff;
+            color: #666;
+        }
+        .category-chip:hover, .category-chip.active {
+            background: #1a1a2e;
+            color: #fff;
+            border-color: #1a1a2e;
+        }
+
+        /* 按钮 */
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: #fff;
+            padding: 12px 32px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(238,90,36,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(238,90,36,0.45);
+        }
+        .btn-outline {
+            padding: 12px 32px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            transition: all 0.3s;
+        }
+        .btn-outline:hover {
+            background: #fff;
+            color: #1a1a2e;
+        }
+        .btn-cart {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: #1a1a2e;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-cart:hover {
+            background: #ff6b6b;
+            transform: scale(1.1);
+        }
+
+        /* 统计数字 */
+        .stat-number {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 页脚 */
+        .footer-gradient {
+            background: linear-gradient(180deg, #1a1a2e 0%, #0f0c29 100%);
+        }
+
+        /* 滚动入场 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 品牌走马灯 */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            display: flex;
+            animation: marquee 25s linear infinite;
+            width: max-content;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- 顶部公告栏 -->
+    <div class="announcement-bar text-white text-center py-2 text-sm font-medium tracking-wide">
+        新用户首单享 9 折优惠 ｜ 满 ¥299 包邮 ｜ 限时新品 8 折起
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="nav-glass sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="index.html" class="text-2xl font-extrabold tracking-tight">
+                <span class="text-red-500">Trend</span><span class="text-gray-900">Shop</span>
+            </a>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-700">
+                <a href="#" class="hover:text-red-500 transition">首页</a>
+                <a href="#" class="hover:text-red-500 transition">新品上市</a>
+                <a href="#" class="hover:text-red-500 transition">男装</a>
+                <a href="#" class="hover:text-red-500 transition">女装</a>
+                <a href="#" class="hover:text-red-500 transition">配饰</a>
+                <a href="#" class="hover:text-red-500 transition">促销</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="relative text-gray-700 hover:text-red-500 transition">
+                    <i class="fa fa-search text-lg"></i>
+                </button>
+                <button class="relative text-gray-700 hover:text-red-500 transition">
+                    <i class="fa fa-heart-o text-lg"></i>
+                </button>
+                <button class="relative text-gray-700 hover:text-red-500 transition">
+                    <i class="fa fa-shopping-bag text-lg"></i>
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span>
+                </button>
+                <a href="index.html" class="text-sm text-gray-400 hover:text-gray-700 transition ml-2">
+                    <i class="fa fa-arrow-left mr-1"></i>返回主页
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="hero-gradient text-white relative z-10">
+        <div class="max-w-7xl mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center gap-12 relative z-10">
+            <div class="flex-1 reveal">
+                <span class="badge-hot text-sm px-4 py-1.5 rounded-full">2026 春夏系列</span>
+                <h1 class="text-[clamp(2.5rem,6vw,4rem)] font-extrabold leading-tight mt-4">
+                    焕新你的 <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-yellow-300">时尚风格</span>
+                </h1>
+                <p class="text-gray-300 mt-4 text-lg max-w-md leading-relaxed">
+                    精选全球设计师品牌，为你打造独一无二的潮流穿搭
+                </p>
+                <div class="mt-8 flex gap-4">
+                    <button class="btn-primary">立即选购</button>
+                    <button class="btn-outline">查看合集</button>
+                </div>
+                <div class="mt-10 flex gap-8">
+                    <div>
+                        <div class="stat-number">50K+</div>
+                        <div class="text-gray-400 text-sm mt-1">满意用户</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">200+</div>
+                        <div class="text-gray-400 text-sm mt-1">设计师品牌</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">24h</div>
+                        <div class="text-gray-400 text-sm mt-1">快速发货</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1 reveal">
+                <div class="relative">
+                    <div class="w-full h-80 md:h-96 rounded-3xl bg-gradient-to-br from-red-400/30 via-purple-400/20 to-yellow-300/30 flex items-center justify-center border border-white/10">
+                        <i class="fa fa-shopping-bag text-8xl text-white/20"></i>
+                    </div>
+                    <!-- 浮动卡片 -->
+                    <div class="absolute -bottom-4 -left-4 bg-white/10 backdrop-blur-xl rounded-2xl p-4 border border-white/20 text-sm">
+                        <p class="text-white/70 text-xs">今日热销</p>
+                        <p class="font-bold text-lg">¥<span class="text-yellow-300">299</span></p>
+                        <p class="text-white/50 text-xs">限量 100 件</p>
+                    </div>
+                    <div class="absolute -top-4 -right-4 bg-white/10 backdrop-blur-xl rounded-2xl p-3 border border-white/20">
+                        <i class="fa fa-star text-yellow-400 text-xl"></i>
+                        <p class="text-xs mt-1 font-bold">4.9</p>
+                        <p class="text-[10px] text-white/50">好评率</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 品牌走马灯 -->
+    <section class="py-10 bg-white border-y border-gray-100 overflow-hidden">
+        <div class="marquee-track">
+            <span class="text-gray-300 text-2xl font-bold mx-10">NIKE</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">ADIDAS</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">ZARA</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">H&M</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">UNIQLO</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">GUCCI</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">PRADA</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">DIOR</span>
+            <!-- 重复 -->
+            <span class="text-gray-300 text-2xl font-bold mx-10">NIKE</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">ADIDAS</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">ZARA</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">H&M</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">UNIQLO</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">GUCCI</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">PRADA</span>
+            <span class="text-gray-300 text-2xl font-bold mx-10">DIOR</span>
+        </div>
+    </section>
+
+    <!-- 商品展示 -->
+    <section class="py-16 max-w-7xl mx-auto px-6">
+        <div class="text-center mb-10 reveal">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">热门商品</h2>
+            <p class="text-gray-500 mt-2">为你精选的潮流单品</p>
+        </div>
+
+        <!-- 分类标签 -->
+        <div class="flex flex-wrap justify-center gap-3 mb-10 reveal">
+            <span class="category-chip active">全部</span>
+            <span class="category-chip">男装</span>
+            <span class="category-chip">女装</span>
+            <span class="category-chip">鞋履</span>
+            <span class="category-chip">包包</span>
+            <span class="category-chip">配饰</span>
+            <span class="category-chip">数码</span>
+        </div>
+
+        <!-- 商品卡片 -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- 商品 1 -->
+            <div class="product-card reveal">
+                <div class="img-wrap h-56 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <i class="fa fa-tshirt text-5xl text-gray-300"></i>
+                    <span class="quick-view">快速查看</span>
+                </div>
+                <div class="p-4">
+                    <span class="badge-hot">热卖</span>
+                    <h3 class="font-semibold mt-2 text-gray-900">经典纯棉T恤 男女同款</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fa fa-star text-yellow-400 text-xs"></i>
+                        <span class="text-xs text-gray-500">4.8 (2.3k)</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <div>
+                            <span class="text-lg font-bold text-red-500">¥129</span>
+                            <span class="text-xs text-gray-400 line-through ml-2">¥259</span>
+                        </div>
+                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品 2 -->
+            <div class="product-card reveal">
+                <div class="img-wrap h-56 bg-gradient-to-br from-rose-100 to-pink-200 flex items-center justify-center">
+                    <i class="fa fa-shopping-bag text-5xl text-pink-300"></i>
+                    <span class="quick-view">快速查看</span>
+                </div>
+                <div class="p-4">
+                    <span class="badge-new">新品</span>
+                    <h3 class="font-semibold mt-2 text-gray-900">时尚斜挎包 简约百搭</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fa fa-star text-yellow-400 text-xs"></i>
+                        <span class="text-xs text-gray-500">4.9 (856)</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <div>
+                            <span class="text-lg font-bold text-red-500">¥199</span>
+                            <span class="text-xs text-gray-400 line-through ml-2">¥399</span>
+                        </div>
+                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品 3 -->
+            <div class="product-card reveal">
+                <div class="img-wrap h-56 bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+                    <i class="fa fa-headphones text-5xl text-indigo-300"></i>
+                    <span class="quick-view">快速查看</span>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold mt-2 text-gray-900">无线降噪耳机 Pro</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fa fa-star text-yellow-400 text-xs"></i>
+                        <span class="text-xs text-gray-500">4.7 (1.5k)</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <div>
+                            <span class="text-lg font-bold text-red-500">¥599</span>
+                            <span class="text-xs text-gray-400 line-through ml-2">¥899</span>
+                        </div>
+                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品 4 -->
+            <div class="product-card reveal">
+                <div class="img-wrap h-56 bg-gradient-to-br from-amber-50 to-yellow-100 flex items-center justify-center">
+                    <i class="fa fa-clock-o text-5xl text-amber-300"></i>
+                    <span class="quick-view">快速查看</span>
+                </div>
+                <div class="p-4">
+                    <span class="badge-hot">限时特惠</span>
+                    <h3 class="font-semibold mt-2 text-gray-900">简约石英腕表 男款</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fa fa-star text-yellow-400 text-xs"></i>
+                        <span class="text-xs text-gray-500">4.9 (3.1k)</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <div>
+                            <span class="text-lg font-bold text-red-500">¥899</span>
+                            <span class="text-xs text-gray-400 line-through ml-2">¥1599</span>
+                        </div>
+                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品 5 -->
+            <div class="product-card reveal">
+                <div class="img-wrap h-56 bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
+                    <i class="fa fa-sun-o text-5xl text-emerald-300"></i>
+                    <span class="quick-view">快速查看</span>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold mt-2 text-gray-900">复古太阳镜 防紫外线</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fa fa-star text-yellow-400 text-xs"></i>
+                        <span class="text-xs text-gray-500">4.6 (620)</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <div>
+                            <span class="text-lg font-bold text-red-500">¥159</span>
+                            <span class="text-xs text-gray-400 line-through ml-2">¥299</span>
+                        </div>
+                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品 6 -->
+            <div class="product-card reveal">
+                <div class="img-wrap h-56 bg-gradient-to-br from-purple-50 to-violet-100 flex items-center justify-center">
+                    <i class="fa fa-mobile text-5xl text-violet-300"></i>
+                    <span class="quick-view">快速查看</span>
+                </div>
+                <div class="p-4">
+                    <span class="badge-new">新品</span>
+                    <h3 class="font-semibold mt-2 text-gray-900">磁吸手机壳 防摔保护</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fa fa-star text-yellow-400 text-xs"></i>
+                        <span class="text-xs text-gray-500">4.7 (428)</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <div>
+                            <span class="text-lg font-bold text-red-500">¥79</span>
+                            <span class="text-xs text-gray-400 line-through ml-2">¥129</span>
+                        </div>
+                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品 7 -->
+            <div class="product-card reveal">
+                <div class="img-wrap h-56 bg-gradient-to-br from-orange-50 to-red-100 flex items-center justify-center">
+                    <i class="fa fa-shoe-prints text-5xl text-orange-300"></i>
+                    <span class="quick-view">快速查看</span>
+                </div>
+                <div class="p-4">
+                    <span class="badge-hot">爆款</span>
+                    <h3 class="font-semibold mt-2 text-gray-900">复古运动鞋 老爹鞋</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fa fa-star text-yellow-400 text-xs"></i>
+                        <span class="text-xs text-gray-500">4.8 (4.2k)</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <div>
+                            <span class="text-lg font-bold text-red-500">¥459</span>
+                            <span class="text-xs text-gray-400 line-through ml-2">¥699</span>
+                        </div>
+                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品 8 -->
+            <div class="product-card reveal">
+                <div class="img-wrap h-56 bg-gradient-to-br from-cyan-50 to-teal-100 flex items-center justify-center">
+                    <i class="fa fa-camera text-5xl text-teal-300"></i>
+                    <span class="quick-view">快速查看</span>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold mt-2 text-gray-900">微单相机包 防水便携</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fa fa-star text-yellow-400 text-xs"></i>
+                        <span class="text-xs text-gray-500">4.5 (198)</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <div>
+                            <span class="text-lg font-bold text-red-500">¥249</span>
+                            <span class="text-xs text-gray-400 line-through ml-2">¥399</span>
+                        </div>
+                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-10 reveal">
+            <button class="btn-primary text-lg px-10 py-3">查看更多商品</button>
+        </div>
+    </section>
+
+    <!-- 特色区域 -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-8 reveal">
+                <div class="text-center p-8 bg-white rounded-2xl shadow-sm">
+                    <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-truck text-2xl text-red-500"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-900">免费配送</h3>
+                    <p class="text-gray-500 text-sm mt-2">满 ¥299 全国包邮，48小时内发货</p>
+                </div>
+                <div class="text-center p-8 bg-white rounded-2xl shadow-sm">
+                    <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-shield text-2xl text-green-500"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-900">正品保障</h3>
+                    <p class="text-gray-500 text-sm mt-2">100% 正品保证，支持专柜验货</p>
+                </div>
+                <div class="text-center p-8 bg-white rounded-2xl shadow-sm">
+                    <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-refresh text-2xl text-blue-500"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-900">无忧退换</h3>
+                    <p class="text-gray-500 text-sm mt-2">7天无理由退换货，购物更安心</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="footer-gradient text-white py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-extrabold"><span class="text-red-500">Trend</span>Shop</h3>
+                    <p class="text-gray-400 text-sm mt-3 leading-relaxed">潮流在线商城，精选全球设计师品牌，为你带来最新时尚单品。</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">购物指南</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">购物流程</a></li>
+                        <li><a href="#" class="hover:text-white transition">会员制度</a></li>
+                        <li><a href="#" class="hover:text-white transition">优惠券使用</a></li>
+                        <li><a href="#" class="hover:text-white transition">积分规则</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">配送说明</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">配送范围</a></li>
+                        <li><a href="#" class="hover:text-white transition">配送时效</a></li>
+                        <li><a href="#" class="hover:text-white transition">运费标准</a></li>
+                        <li><a href="#" class="hover:text-white transition">物流查询</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">联系我们</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><i class="fa fa-envelope mr-2 text-red-400"></i>service@trendshop.com</li>
+                        <li><i class="fa fa-phone mr-2 text-red-400"></i>400-888-8888</li>
+                        <li><i class="fa fa-clock-o mr-2 text-red-400"></i>9:00 - 22:00</li>
+                    </ul>
+                    <div class="flex gap-4 mt-4 text-lg">
+                        <a href="#" class="text-gray-400 hover:text-red-400 transition"><i class="fa fa-weibo"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-red-400 transition"><i class="fa fa-wechat"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-red-400 transition"><i class="fa fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-8 pt-8 text-center text-sm text-gray-500">
+                &copy; 2026 TrendShop. All rights reserved. ｜ <a href="index.html" class="hover:text-red-400 transition">返回个人主页</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 滚动入场动画
+        (function() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+            reveals.forEach(el => observer.observe(el));
+        })();
+
+        // 分类标签切换
+        document.querySelectorAll('.category-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 购物车按钮点击动画
+        document.querySelectorAll('.btn-cart').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.innerHTML = '<i class="fa fa-check"></i>';
+                this.style.background = '#0be881';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fa fa-plus"></i>';
+                    this.style.background = '#1a1a2e';
+                }, 800);
+            });
+        });
+    </script>
+
+</body>
+</html>
