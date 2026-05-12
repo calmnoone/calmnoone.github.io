@@ -8,142 +8,535 @@
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
         html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        .gradient-bg { background: linear-gradient(135deg, #1e293b, #0f172a); }
-        .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-6px); }
+        body { font-family: 'Inter', system-ui, sans-serif; cursor: default; overflow-x: hidden; }
+
+        /* 动态渐变背景 */
+        .gradient-bg {
+            background: linear-gradient(135deg, #0a0a1a 0%, #0f172a 30%, #1a1a3e 60%, #0a0a1a 100%);
+            background-size: 400% 400%;
+            animation: bgShift 15s ease infinite;
+        }
+        @keyframes bgShift {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 0%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+
+        /* 粒子画布 */
+        #particles {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* 全局光照跟随鼠标 */
+        .glow-cursor {
+            position: fixed; pointer-events: none; z-index: 9999;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+        }
+
+        /* 导航栏玻璃效果 */
+        .glass-nav {
+            background: rgba(10,10,30,0.6);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* 霓虹发光文字 */
+        .neon-text {
+            text-shadow: 0 0 20px rgba(59,130,246,0.5), 0 0 60px rgba(59,130,246,0.2), 0 0 100px rgba(59,130,246,0.1);
+        }
+        .neon-cyan {
+            text-shadow: 0 0 20px rgba(34,211,238,0.5), 0 0 60px rgba(34,211,238,0.2);
+        }
+
+        /* 打字机光标 */
+        .typewriter::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+            color: #3b82f6;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* 卡片悬浮发光 */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .card-hover::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: left 0.6s;
+        }
+        .card-hover:hover::before { left: 100%; }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(59,130,246,0.15), 0 0 40px rgba(59,130,246,0.05);
+        }
+
+        /* 技能进度条 */
+        .skill-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        .skill-bar::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+            background-size: 200% 100%;
+            animation: shimmer 2s ease infinite;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 200% 50%; }
+        }
+
+        /* 滚动入场动画 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* 项目卡片图片 */
+        .project-img {
+            position: relative;
+            overflow: hidden;
+        }
+        .project-img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.2) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .project-img:hover::after { opacity: 1; }
+
+        /* 导航高亮 */
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 50%;
+            width: 0; height: 2px;
+            background: #3b82f6;
+            border-radius: 1px;
+            transition: all 0.3s;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* 按钮发光 */
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-glow::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6);
+            background-size: 400%;
+            border-radius: inherit;
+            z-index: -1;
+            animation: glowSpin 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .btn-glow:hover::after { opacity: 1; }
+
+        @keyframes glowSpin {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+
+        /* 底部光带 */
+        footer {
+            position: relative;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; width: 80%; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.3), transparent);
+        }
     </style>
 </head>
 <body class="text-white gradient-bg min-h-screen">
 
-<!-- 导航栏 -->
-<nav class="fixed w-full top-0 bg-black/40 backdrop-blur-md z-50">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div class="text-xl font-bold">MySite</div>
-        <div class="flex gap-6">
-            <a href="#home" class="hover:text-blue-400">首页</a>
-            <a href="#about" class="hover:text-blue-400">关于我</a>
-            <a href="#skills" class="hover:text-blue-400">技能</a>
-            <a href="#projects" class="hover:text-blue-400">项目</a>
-            <a href="#contact" class="hover:text-blue-400">联系</a>
-        </div>
-    </div>
-</nav>
+    <!-- 粒子背景 -->
+    <canvas id="particles"></canvas>
 
-<!-- 首页 -->
-<section id="home" class="min-h-screen flex items-center justify-center px-6 text-center">
-    <div>
-        <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] font-bold leading-tight">
-            你好，我是 <span class="text-blue-400">前端开发者</span>
-        </h1>
-        <p class="mt-4 text-gray-300 text-lg max-w-2xl mx-auto">
-            专注于简洁、现代、高效的网页设计与开发
-        </p>
-        <div class="mt-8 flex gap-4 justify-center">
-            <a href="#about" class="px-6 py-3 rounded-full bg-blue-500 hover:bg-blue-600 transition">了解更多</a>
-            <a href="#contact" class="px-6 py-3 rounded-full border border-white/30 hover:border-white transition">联系我</a>
-        </div>
-    </div>
-</section>
+    <!-- 鼠标跟随光晕 -->
+    <div class="glow-cursor" id="glowCursor"></div>
 
-<!-- 关于我 -->
-<section id="about" class="py-20 px-6 max-w-6xl mx-auto">
-    <div class="text-center mb-12">
-        <h2 class="text-4xl font-bold">关于我</h2>
-        <div class="w-16 h-1 bg-blue-500 mx-auto mt-4 rounded-full"></div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-10 items-center">
+    <!-- 导航栏 -->
+    <nav class="fixed w-full top-0 glass-nav z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold neon-text">MySite</div>
+            <div class="flex gap-6 text-sm">
+                <a href="#home" class="nav-link hover:text-blue-400">首页</a>
+                <a href="#about" class="nav-link hover:text-blue-400">关于我</a>
+                <a href="#skills" class="nav-link hover:text-blue-400">技能</a>
+                <a href="#projects" class="nav-link hover:text-blue-400">项目</a>
+                <a href="#contact" class="nav-link hover:text-blue-400">联系</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首页 -->
+    <section id="home" class="min-h-screen flex items-center justify-center px-6 text-center relative z-10">
         <div>
-            <p class="text-gray-300 text-lg leading-relaxed">
-                我热爱前端开发，喜欢用代码实现美观、流畅的用户界面。熟悉 HTML、CSS、JavaScript、Tailwind、Vue、React 等技术。
-                做事认真、追求细节、持续学习，希望做出让人眼前一亮的作品。
+            <p class="text-blue-400 text-lg mb-2 reveal" style="letter-spacing: 4px;">WELCOME</p>
+            <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] font-bold leading-tight reveal reveal-delay-1">
+                你好，我是 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 typewriter" id="typewriter"></span>
+            </h1>
+            <p class="mt-4 text-gray-400 text-lg max-w-2xl mx-auto reveal reveal-delay-2" style="letter-spacing: 1px;">
+                专注于简洁、现代、高效的网页设计与开发
             </p>
+            <div class="mt-8 flex gap-4 justify-center reveal reveal-delay-3">
+                <a href="#about" class="btn-glow px-6 py-3 rounded-full bg-blue-500 hover:bg-blue-600 transition font-medium">了解更多</a>
+                <a href="#contact" class="px-6 py-3 rounded-full border border-white/20 hover:border-blue-400 hover:text-blue-400 transition font-medium">联系我</a>
+            </div>
+            <!-- 向下滚动指示器 -->
+            <div class="mt-12 reveal reveal-delay-4">
+                <div class="w-6 h-10 border-2 border-white/20 rounded-full mx-auto flex justify-center">
+                    <div class="w-1.5 h-3 bg-blue-400 rounded-full mt-2 animate-bounce"></div>
+                </div>
+            </div>
         </div>
-        <div class="bg-white/10 p-6 rounded-2xl card-hover">
-            <h3 class="text-2xl font-semibold mb-4">基本信息</h3>
-            <ul class="space-y-2 text-gray-300">
-                <li><span class="text-blue-400">姓名：</span>ca1m0ne</li>
-                <li><span class="text-blue-400">职业：</span>前端开发</li>
-                <li><span class="text-blue-400">邮箱：</span>2932361780@qq.com</li>
-                <li><span class="text-blue-400">城市：</span>中国</li>
-            </ul>
-        </div>
-    </div>
-</section>
+    </section>
 
-<!-- 技能 -->
-<section id="skills" class="py-20 bg-white/5">
-    <div class="max-w-6xl mx-auto px-6">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold">我的技能</h2>
-            <div class="w-16 h-1 bg-blue-500 mx-auto mt-4 rounded-full"></div>
+    <!-- 关于我 -->
+    <section id="about" class="py-20 px-6 max-w-6xl mx-auto relative z-10">
+        <div class="text-center mb-12 reveal">
+            <h2 class="text-4xl font-bold neon-text">关于我</h2>
+            <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
         </div>
-        <div class="grid md:grid-cols-3 gap-6">
-            <div class="p-6 bg-white/10 rounded-2xl card-hover">
-                <i class="fa fa-html5 text-4xl text-orange-500 mb-4"></i>
-                <h3 class="text-xl font-bold">HTML5</h3>
-                <p class="text-gray-300 mt-2">语义化、结构清晰、可维护性强</p>
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+            <div class="reveal reveal-delay-1">
+                <p class="text-gray-400 text-lg leading-relaxed">
+                    我热爱前端开发，喜欢用代码实现美观、流畅的用户界面。熟悉 HTML、CSS、JavaScript、Tailwind、Vue、React 等技术。
+                    做事认真、追求细节、持续学习，希望做出让人眼前一亮的作品。
+                </p>
             </div>
-            <div class="p-6 bg-white/10 rounded-2xl card-hover">
-                <i class="fa fa-css3 text-4xl text-blue-400 mb-4"></i>
-                <h3 class="text-xl font-bold">CSS3 / Tailwind</h3>
-                <p class="text-gray-300 mt-2">响应式、动画、现代化样式</p>
-            </div>
-            <div class="p-6 bg-white/10 rounded-2xl card-hover">
-                <i class="fa fa-js text-4xl text-yellow-400 mb-4"></i>
-                <h3 class="text-xl font-bold">JavaScript</h3>
-                <p class="text-gray-300 mt-2">交互逻辑、组件开发、工程化</p>
+            <div class="bg-white/5 backdrop-blur-sm p-6 rounded-2xl card-hover border border-white/5 reveal reveal-delay-2">
+                <h3 class="text-2xl font-semibold mb-4 neon-cyan">基本信息</h3>
+                <ul class="space-y-3 text-gray-300">
+                    <li class="flex items-center gap-3"><i class="fa fa-user text-blue-400 w-5"></i><span class="text-gray-500">姓名：</span>ca1m0ne</li>
+                    <li class="flex items-center gap-3"><i class="fa fa-code text-purple-400 w-5"></i><span class="text-gray-500">职业：</span>前端开发</li>
+                    <li class="flex items-center gap-3"><i class="fa fa-envelope text-cyan-400 w-5"></i><span class="text-gray-500">邮箱：</span>2932361780@qq.com</li>
+                    <li class="flex items-center gap-3"><i class="fa fa-map-marker text-green-400 w-5"></i><span class="text-gray-500">城市：</span>中国</li>
+                </ul>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- 项目 -->
-<section id="projects" class="py-20 px-6 max-w-6xl mx-auto">
-    <div class="text-center mb-12">
-        <h2 class="text-4xl font-bold">项目展示</h2>
-        <div class="w-16 h-1 bg-blue-500 mx-auto mt-4 rounded-full"></div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-8">
-        <div class="bg-white/10 rounded-2xl overflow-hidden card-hover">
-            <div class="h-40 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-            <div class="p-6">
-                <h3 class="text-xl font-bold">个人博客系统</h3>
-                <p class="text-gray-300 mt-2">响应式博客，支持暗黑模式、文章管理</p>
+    <!-- 技能 -->
+    <section id="skills" class="py-20 bg-white/[0.02] relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-4xl font-bold neon-text">我的技能</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="p-6 bg-white/5 backdrop-blur-sm rounded-2xl card-hover border border-white/5 reveal reveal-delay-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fa fa-html5 text-3xl text-orange-500"></i>
+                        <h3 class="text-xl font-bold">HTML5</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">语义化、结构清晰、可维护性强</p>
+                    <div class="skill-bar" data-width="95%"></div>
+                    <span class="text-xs text-gray-500 mt-1 block text-right">95%</span>
+                </div>
+                <div class="p-6 bg-white/5 backdrop-blur-sm rounded-2xl card-hover border border-white/5 reveal reveal-delay-2">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fa fa-css3 text-3xl text-blue-400"></i>
+                        <h3 class="text-xl font-bold">CSS3 / Tailwind</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">响应式、动画、现代化样式</p>
+                    <div class="skill-bar" data-width="90%"></div>
+                    <span class="text-xs text-gray-500 mt-1 block text-right">90%</span>
+                </div>
+                <div class="p-6 bg-white/5 backdrop-blur-sm rounded-2xl card-hover border border-white/5 reveal reveal-delay-3">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fa fa-code text-3xl text-yellow-400"></i>
+                        <h3 class="text-xl font-bold">JavaScript</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">交互逻辑、组件开发、工程化</p>
+                    <div class="skill-bar" data-width="85%"></div>
+                    <span class="text-xs text-gray-500 mt-1 block text-right">85%</span>
+                </div>
             </div>
         </div>
-        <div class="bg-white/10 rounded-2xl overflow-hidden card-hover">
-            <div class="h-40 bg-gradient-to-r from-green-400 to-teal-500"></div>
-            <div class="p-6">
-                <h3 class="text-xl font-bold">电商首页</h3>
-                <p class="text-gray-300 mt-2">现代化商城界面，流畅动画</p>
+    </section>
+
+    <!-- 项目 -->
+    <section id="projects" class="py-20 px-6 max-w-6xl mx-auto relative z-10">
+        <div class="text-center mb-12 reveal">
+            <h2 class="text-4xl font-bold neon-text">项目展示</h2>
+            <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden card-hover border border-white/5 reveal reveal-delay-1">
+                <div class="h-44 project-img bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
+                    <i class="fa fa-pencil-square-o text-6xl text-white/30"></i>
+                </div>
+                <div class="p-6">
+                    <span class="text-xs text-blue-400 bg-blue-400/10 px-2 py-1 rounded-full">Full Stack</span>
+                    <h3 class="text-xl font-bold mt-3">个人博客系统</h3>
+                    <p class="text-gray-400 mt-2 text-sm">响应式博客，支持暗黑模式、文章管理</p>
+                </div>
+            </div>
+            <div class="bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden card-hover border border-white/5 reveal reveal-delay-2">
+                <div class="h-44 project-img bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                    <i class="fa fa-shopping-cart text-6xl text-white/30"></i>
+                </div>
+                <div class="p-6">
+                    <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">E-Commerce</span>
+                    <h3 class="text-xl font-bold mt-3">电商首页</h3>
+                    <p class="text-gray-400 mt-2 text-sm">现代化商城界面，流畅动画</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- 联系 -->
-<section id="contact" class="py-20 bg-white/5">
-    <div class="max-w-4xl mx-auto px-6 text-center">
-        <h2 class="text-4xl font-bold">联系我</h2>
-        <p class="text-gray-300 mt-4">欢迎交流、合作、学习</p>
-        <!-- 新增：显示微信号（保持之前的配置） -->
-        <p class="text-gray-300 mt-2 text-lg">微信：<span class="text-blue-400 font-medium">calm_clouds</span></p>
-        <div class="flex justify-center gap-6 mt-8 text-3xl">
-            <!-- 关键修改：GitHub 图标添加你的仓库链接，新窗口打开 -->
-            <a href="https://github.com/calmnoone/calmnoone.github.io" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400"><i class="fa fa-github"></i></a>
-            <!-- 微信图标（可保留空链接，或添加微信相关提示） -->
-            <a href="#" class="hover:text-blue-400"><i class="fa fa-weixin"></i></a>
-            <!-- 邮箱图标（可替换为你的邮箱链接） -->
-            <a href="mailto:2932361780@qq.com" class="hover:text-blue-400"><i class="fa fa-envelope"></i></a>
+    <!-- 联系 -->
+    <section id="contact" class="py-20 bg-white/[0.02] relative z-10">
+        <div class="max-w-4xl mx-auto px-6 text-center reveal">
+            <h2 class="text-4xl font-bold neon-text">联系我</h2>
+            <p class="text-gray-400 mt-4">欢迎交流、合作、学习</p>
+            <p class="text-gray-400 mt-2 text-lg">微信：<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-medium">calm_clouds</span></p>
+            <div class="flex justify-center gap-8 mt-8 text-3xl">
+                <a href="https://github.com/calmnoone/calmnoone.github.io" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition transform hover:scale-125 duration-300">
+                    <i class="fa fa-github"></i>
+                </a>
+                <a href="#" class="hover:text-green-400 transition transform hover:scale-125 duration-300">
+                    <i class="fa fa-weixin"></i>
+                </a>
+                <a href="mailto:2932361780@qq.com" class="hover:text-cyan-400 transition transform hover:scale-125 duration-300">
+                    <i class="fa fa-envelope"></i>
+                </a>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- 底部 -->
-<footer class="py-6 text-center text-gray-400">
-    © 2026 MyPersonalSite. All rights reserved.333
-</footer>
+    <!-- 底部 -->
+    <footer class="py-6 text-center text-gray-500 text-sm relative z-10">
+        &copy; 2026 MyPersonalSite. All rights reserved.
+    </footer>
+
+    <script>
+        // ===== 粒子背景 =====
+        (function() {
+            const canvas = document.getElementById('particles');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let w, h;
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', () => {
+                resize();
+                initParticles();
+            });
+
+            function initParticles() {
+                const count = Math.floor((w * h) / 10000);
+                particles = [];
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        r: Math.random() * 2 + 0.5,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        alpha: Math.random() * 0.5 + 0.2,
+                    });
+                }
+            }
+            initParticles();
+
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+                particles.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
+                    ctx.fill();
+                });
+
+                // 连线
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(59,130,246,${0.06 * (1 - dist / 120)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function update() {
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x < 0 || p.x > w) p.vx *= -1;
+                    if (p.y < 0 || p.y > h) p.vy *= -1;
+                });
+            }
+
+            function loop() {
+                draw();
+                update();
+                requestAnimationFrame(loop);
+            }
+            loop();
+
+            // 鼠标吸引粒子
+            let mx = -999, my = -999;
+            document.addEventListener('mousemove', e => {
+                mx = e.clientX;
+                my = e.clientY;
+            });
+            document.addEventListener('mouseleave', () => { mx = -999; my = -999; });
+
+            // 在 update 中加入鼠标引力（轻量）
+            const origUpdate = update;
+            update = function() {
+                origUpdate();
+                particles.forEach(p => {
+                    const dx = mx - p.x;
+                    const dy = my - p.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150 && dist > 0) {
+                        p.vx += (dx / dist) * 0.02;
+                        p.vy += (dy / dist) * 0.02;
+                        p.vx *= 0.98;
+                        p.vy *= 0.98;
+                    }
+                });
+            };
+        })();
+
+        // ===== 鼠标光晕跟随 =====
+        (function() {
+            const glow = document.getElementById('glowCursor');
+            document.addEventListener('mousemove', e => {
+                glow.style.left = e.clientX + 'px';
+                glow.style.top = e.clientY + 'px';
+                glow.style.opacity = '1';
+            });
+            document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+        })();
+
+        // ===== 打字机效果 =====
+        (function() {
+            const el = document.getElementById('typewriter');
+            const words = ['前端开发者', '创意探索者', 'UI 爱好者'];
+            let wordIdx = 0, charIdx = 0, isDeleting = false;
+
+            function type() {
+                const current = words[wordIdx];
+                if (isDeleting) {
+                    el.textContent = current.substring(0, charIdx - 1);
+                    charIdx--;
+                } else {
+                    el.textContent = current.substring(0, charIdx + 1);
+                    charIdx++;
+                }
+
+                let speed = isDeleting ? 50 : 100;
+                if (!isDeleting && charIdx === current.length) {
+                    speed = 2000;
+                    isDeleting = true;
+                } else if (isDeleting && charIdx === 0) {
+                    isDeleting = false;
+                    wordIdx = (wordIdx + 1) % words.length;
+                    speed = 300;
+                }
+                setTimeout(type, speed);
+            }
+            type();
+        })();
+
+        // ===== 滚动入场动画 =====
+        (function() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+            reveals.forEach(el => observer.observe(el));
+        })();
+
+        // ===== 技能条滚动动画 =====
+        (function() {
+            const bars = document.querySelectorAll('.skill-bar');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.setProperty('--w', entry.target.dataset.width);
+                        entry.target.style.setProperty('width', entry.target.dataset.width);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            bars.forEach(bar => { bar.style.width = '0'; observer.observe(bar); });
+        })();
+
+        // ===== 项目卡片鼠标光效 =====
+        (function() {
+            document.querySelectorAll('.project-img').forEach(el => {
+                el.addEventListener('mousemove', e => {
+                    const rect = el.getBoundingClientRect();
+                    el.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+                    el.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+                });
+            });
+        })();
+    </script>
 
 </body>
-
+</html>
