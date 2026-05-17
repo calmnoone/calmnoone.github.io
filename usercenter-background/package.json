@@ -2,10 +2,13 @@
   "name": "usercenter-background",
   "version": "1.0.0",
   "description": "User Center backend API service",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "main": "src/index.js",
   "scripts": {
-    "start": "node --no-warnings src/index.js",
-    "dev": "node --no-warnings --watch src/index.js"
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
