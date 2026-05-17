@@ -2,42 +2,76 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <!-- viewport元标签：让页面适配手机屏幕宽度，实现响应式布局 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>潮流商城 - TrendShop</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <style>
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: #f5f5f7; }
 
+    <!-- 【框架】Tailwind CSS：用CDN引入，通过class名直接写样式（如bg-white、text-red-500、flex等） -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 【图标库】Font Awesome 4.7：提供fa-开头的矢量图标（购物车、搜索、星星等） -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style>
+        /* ================================================================
+           全局基础样式
+           功能：设置页面平滑滚动、全局字体、背景色
+           语法：html选择器 + scroll-behavior属性（CSS3平滑滚动）
+           ================================================================ */
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f5f5f7;
+        }
+
+        /* ================================================================
+           顶部公告栏（announcement-bar）
+           功能：顶部滚动促销条，渐变背景 + 流光动画
+           语法：CSS linear-gradient()渐变函数 + @keyframes关键帧动画
+           ================================================================ */
         .announcement-bar {
+            /* 多层渐变色在垂直方向排列 */
             background: linear-gradient(90deg, #1a1a2e, #16213e, #0f3460, #16213e, #1a1a2e);
+            /* background-size设为200%让动画有平移空间 */
             background-size: 200% 100%;
+            /* 绑定动画：名称announceShimmer，周期4秒，ease缓动，infinite无限循环 */
             animation: announceShimmer 4s ease infinite;
         }
+        /* @keyframes定义动画关键帧：通过改变background-position实现流光移动效果 */
         @keyframes announceShimmer {
             0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            50%      { background-position: 100% 50%; }
         }
 
+        /* ================================================================
+           导航栏毛玻璃效果（nav-glass）
+           功能：固定顶部导航栏，半透明背景 + 模糊效果
+           语法：position:sticky粘性定位 + backdrop-filter毛玻璃滤镜（CSS3）
+           ================================================================ */
         .nav-glass {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.06);
+            background: rgba(255,255,255,0.85);        /* 半透明白色背景，rgba()的a通道控制透明度 */
+            backdrop-filter: blur(20px);               /* 背景模糊20像素，产生毛玻璃效果 */
+            border-bottom: 1px solid rgba(0,0,0,0.06); /* 底部细线分割 */
         }
 
+        /* ================================================================
+           Hero主视觉区（hero-gradient）
+           功能：首页大横幅，深色渐变底 + 两个浮动光球装饰
+           语法：CSS伪元素::before/::after + radial-gradient径向渐变 + position定位
+           ================================================================ */
         .hero-gradient {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); /* 对角线渐变 */
+            position: relative;    /* 作为伪元素的定位父容器 */
+            overflow: hidden;      /* 隐藏溢出容器的光球部分 */
         }
+        /* ::before伪元素：不需要额外HTML标签，用CSS凭空生成一个装饰光球 */
         .hero-gradient::before {
-            content: '';
-            position: absolute;
+            content: '';                                 /* 伪元素必须写content */
+            position: absolute;                          /* 相对于父容器绝对定位 */
             width: 600px; height: 600px;
-            border-radius: 50%;
+            border-radius: 50%;                          /* 正圆形 */
             background: radial-gradient(circle, rgba(255,107,107,0.3) 0%, transparent 70%);
-            top: -200px; right: -100px;
-            animation: floatBubble 8s ease-in-out infinite;
+            top: -200px; right: -100px;                  /* 偏移到右上角露出半个圆 */
+            animation: floatBubble 8s ease-in-out infinite; /* 浮动动画 */
         }
         .hero-gradient::after {
             content: '';
@@ -46,147 +80,256 @@
             border-radius: 50%;
             background: radial-gradient(circle, rgba(78,205,196,0.25) 0%, transparent 70%);
             bottom: -100px; left: -50px;
-            animation: floatBubble 10s ease-in-out infinite reverse;
+            animation: floatBubble 10s ease-in-out infinite reverse; /* reverse反向播放 */
         }
+        /* @keyframes浮动动画：translate位移 + scale缩放，模拟气泡漂浮感 */
         @keyframes floatBubble {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -20px) scale(1.1); }
-            66% { transform: translate(-20px, 15px) scale(0.9); }
+            0%, 100% { transform: translate(0, 0) scale(1); }     /* 原位，正常大小 */
+            33%      { transform: translate(30px, -20px) scale(1.1); } /* 右上飘，变大 */
+            66%      { transform: translate(-20px, 15px) scale(0.9); } /* 左下飘，变小 */
         }
 
+        /* ================================================================
+           商品卡片（product-card）
+           功能：每个商品的展示卡片，hover时上浮 + 阴影加深 + 图片放大
+           语法：transition过渡动画 + :hover伪类 + cubic-bezier自定义贝塞尔缓动曲线
+           ================================================================ */
         .product-card {
             background: #fff;
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 16px;          /* 圆角 */
+            overflow: hidden;             /* 裁剪超出圆角的图片部分 */
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* cubic-bezier自定义缓动曲线，比ease更有弹性 */
             border: 1px solid rgba(0,0,0,0.04);
             position: relative;
         }
+        /* :hover伪类：鼠标悬停时触发下方样式 */
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 24px 60px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.06);
+            transform: translateY(-8px);                          /* 上浮8px */
+            box-shadow: 0 24px 60px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.06); /* 双层阴影叠加，营造深度感 */
         }
         .product-card .img-wrap {
             overflow: hidden; position: relative;
         }
+        /* 图片容器内的图标，hover时放大 */
         .product-card .img-wrap .card-icon {
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .product-card:hover .img-wrap .card-icon {
-            transform: scale(1.08);
+            transform: scale(1.08);        /* 放大8% */
         }
+        /* 快速查看按钮：默认隐藏，hover时从下方滑入 */
         .product-card .quick-view {
             position: absolute;
             bottom: 12px; left: 50%;
-            transform: translateX(-50%) translateY(20px);
+            transform: translateX(-50%) translateY(20px); /* 居中 + 向下偏移20px隐藏 */
             background: rgba(0,0,0,0.75);
             color: #fff; padding: 8px 20px;
             border-radius: 20px; font-size: 0.8rem;
-            opacity: 0; transition: all 0.3s;
-            pointer-events: none; white-space: nowrap;
+            opacity: 0;                    /* 默认透明不可见 */
+            transition: all 0.3s;          /* 0.3秒过渡动画 */
+            pointer-events: none;          /* 隐藏时不拦截鼠标事件 */
+            white-space: nowrap;           /* 文字不换行 */
         }
         .product-card:hover .quick-view {
-            opacity: 1; transform: translateX(-50%) translateY(0);
+            opacity: 1;                    /* 显示 */
+            transform: translateX(-50%) translateY(0); /* 滑入原位 */
         }
 
-        .badge-hot { background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: #fff; font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; font-weight: 600; }
-        .badge-new { background: linear-gradient(135deg, #0be881, #05c46b); color: #fff; font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; font-weight: 600; }
+        /* ================================================================
+           商品标签（badge）
+           功能：商品卡片上的小标签，"热卖"用红橙渐变，"新品"用绿色渐变
+           语法：linear-gradient渐变背景
+           ================================================================ */
+        .badge-hot {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: #fff; font-size: 0.7rem; padding: 4px 10px;
+            border-radius: 4px; font-weight: 600;
+        }
+        .badge-new {
+            background: linear-gradient(135deg, #0be881, #05c46b);
+            color: #fff; font-size: 0.7rem; padding: 4px 10px;
+            border-radius: 4px; font-weight: 600;
+        }
 
+        /* ================================================================
+           分类筛选标签（category-chip）
+           功能：可点击的分类按钮，点击后切换active样式
+           语法：:hover伪类 + .active类选择器联动
+           ================================================================ */
         .category-chip {
             padding: 8px 20px; border-radius: 24px; font-size: 0.85rem;
-            font-weight: 500; cursor: pointer; transition: all 0.3s;
+            font-weight: 500; cursor: pointer;      /* cursor:pointer让鼠标变手型 */
+            transition: all 0.3s;                   /* 颜色切换有过渡动画 */
             border: 1px solid #e0e0e0; background: #fff; color: #666;
         }
         .category-chip:hover, .category-chip.active {
             background: #1a1a2e; color: #fff; border-color: #1a1a2e;
         }
 
+        /* ================================================================
+           按钮样式（btn-primary / btn-outline / btn-cart）
+           功能：三种常用按钮——主按钮（红橙渐变）、描边按钮（透明白边框）、圆形加购按钮
+           语法：渐变背景 + hover上浮 + box-shadow阴影
+           ================================================================ */
         .btn-primary {
             background: linear-gradient(135deg, #ff6b6b, #ee5a24);
             color: #fff; padding: 12px 32px; border-radius: 30px;
             font-weight: 600; border: none; cursor: pointer;
-            transition: all 0.3s; box-shadow: 0 4px 20px rgba(238,90,36,0.3);
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(238,90,36,0.3); /* 带颜色倾向的阴影，增加立体感 */
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(238,90,36,0.45); }
+        .btn-primary:hover {
+            transform: translateY(-2px);               /* 上浮2px */
+            box-shadow: 0 8px 30px rgba(238,90,36,0.45); /* hover时阴影加深扩散 */
+        }
+
         .btn-outline {
             padding: 12px 32px; border-radius: 30px; font-weight: 600;
-            cursor: pointer; background: transparent;
-            border: 2px solid #fff; color: #fff; transition: all 0.3s;
+            cursor: pointer; background: transparent;  /* 透明背景 */
+            border: 2px solid #fff; color: #fff;        /* 白色描边 */
+            transition: all 0.3s;
         }
-        .btn-outline:hover { background: #fff; color: #1a1a2e; }
+        .btn-outline:hover {
+            background: #fff; color: #1a1a2e;           /* hover反色 */
+        }
 
         .btn-cart {
-            width: 40px; height: 40px; border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%; /* 正圆 */
             background: #1a1a2e; color: #fff; border: none;
-            cursor: pointer; font-size: 1rem; transition: all 0.3s;
-            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1rem;
+            transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; /* 弹性布局居中图标 */
         }
-        .btn-cart:hover { background: #ff6b6b; transform: scale(1.1); }
-        .btn-cart.in-cart { background: #0be881; }
+        .btn-cart:hover { background: #ff6b6b; transform: scale(1.1); }   /* hover变红+放大 */
+        .btn-cart.in-cart { background: #0be881; }                         /* 已加购状态变绿 */
 
+        /* ================================================================
+           统计数字（stat-number）
+           功能：首页Hero区的大数字（50K+、200+、24h），文字填充渐变色
+           语法：background-clip:text + text-fill-color:transparent 实现渐变文字
+                 clamp()函数实现响应式字号（最小2rem，理想4vw，最大3rem）
+           ================================================================ */
         .stat-number {
-            font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+            font-size: clamp(2rem, 4vw, 3rem); /* clamp(最小值, 理想值, 最大值)，随视口宽度自动缩放 */
+            font-weight: 800;
             background: linear-gradient(135deg, #ff6b6b, #feca57);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            -webkit-background-clip: text;      /* 背景裁剪到文字区域（WebKit内核） */
+            -webkit-text-fill-color: transparent; /* 文字填充透明，露出背景渐变 */
+            background-clip: text;              /* 标准属性（Firefox等） */
         }
 
+        /* 页脚深色渐变背景 */
         .footer-gradient { background: linear-gradient(180deg, #1a1a2e 0%, #0f0c29 100%); }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
+        /* ================================================================
+           滚动入场动画（reveal）
+           功能：页面滚动到元素位置时，元素从下方淡入滑入
+           语法：Intersection Observer API（JS部分）配合CSS opacity+transform
+           ================================================================ */
+        .reveal {
+            opacity: 0;                        /* 初始透明 */
+            transform: translateY(30px);       /* 初始向下偏移30px */
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); /* 0.7秒缓动过渡 */
+        }
+        .reveal.visible {
+            opacity: 1;                        /* JS添加visible类后显示 */
+            transform: translateY(0);          /* 回到原位 */
+        }
 
+        /* ================================================================
+           品牌走马灯（marquee）
+           功能：品牌名称从左到右无限循环滚动
+           语法：@keyframes定义translateX位移动画 + infinite无限循环
+                 动画原理：内容复制两份，第一份滚完时第二份刚好接上
+           ================================================================ */
         @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* 向左移动一半宽度 */
         }
-        .marquee-track { display: flex; animation: marquee 25s linear infinite; width: max-content; }
+        .marquee-track {
+            display: flex;
+            animation: marquee 25s linear infinite; /* linear匀速，infinite无限循环 */
+            width: max-content;                      /* 宽度由内容撑开，不换行 */
+        }
 
-        /* Modal */
+        /* ================================================================
+           登录弹窗（modal）
+           功能：登录/注册的弹出层，背景遮罩 + 居中白色卡片
+           语法：position:fixed固定定位覆盖全屏 + opacity/pointer-events控制显示隐藏
+                 inset:0 = top:0 right:0 bottom:0 left:0（CSS简写）
+           ================================================================ */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-            z-index: 100; display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5);       /* 半透明黑色遮罩 */
+            z-index: 100;
+            display: flex; align-items: center; justify-content: center; /* flex让内容居中 */
+            opacity: 0; pointer-events: none;  /* 默认隐藏且不拦截点击 */
+            transition: opacity 0.3s;
         }
-        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; } /* 显示 + 恢复点击 */
         .modal-box {
             background: #fff; border-radius: 20px; padding: 32px;
-            width: 400px; max-width: 90vw; position: relative;
+            width: 400px; max-width: 90vw;      /* max-width限制在小屏幕不超出 */
+            position: relative;
             box-shadow: 0 24px 80px rgba(0,0,0,0.2);
         }
 
-        /* Cart sidebar */
+        /* ================================================================
+           购物车侧边栏（cart-sidebar）
+           功能：从右侧滑入的购物车面板
+           语法：position:fixed + right负值隐藏 + transition过渡right属性实现滑入滑出
+           ================================================================ */
         .cart-sidebar {
-            position: fixed; top: 0; right: -420px; width: 400px; max-width: 90vw;
-            height: 100vh; background: #fff; z-index: 200;
-            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: fixed; top: 0; right: -420px; /* right为负值 = 隐藏在屏幕右侧外 */
+            width: 400px; max-width: 90vw;
+            height: 100vh;                           /* vh = 视口高度百分比，100vh = 全屏高 */
+            background: #fff; z-index: 200;
+            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* 只过渡right属性 */
             box-shadow: -4px 0 30px rgba(0,0,0,0.1);
-            display: flex; flex-direction: column;
+            display: flex; flex-direction: column;  /* 垂直弹性布局 */
         }
-        .cart-sidebar.show { right: 0; }
+        .cart-sidebar.show { right: 0; }            /* 添加show类后right=0，滑入屏幕 */
+        /* 购物车背后的半透明遮罩 */
         .cart-backdrop {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
-            z-index: 199; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 199; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
         }
         .cart-backdrop.show { opacity: 1; pointer-events: auto; }
 
-        /* Toast */
+        /* ================================================================
+           消息提示（toast）
+           功能：操作后的弹出提示（"已添加到购物车"等），自动2秒消失
+           语法：position:fixed + left:50%/transform居中技巧 + setTimeout延时隐藏（JS）
+           ================================================================ */
         .toast {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            position: fixed; top: 20px; left: 50%;
+            transform: translateX(-50%);            /* 配合left:50%实现水平居中 */
             background: #1a1a2e; color: #fff; padding: 12px 28px;
             border-radius: 30px; font-size: 0.9rem; z-index: 300;
-            opacity: 0; transition: all 0.4s; pointer-events: none;
+            opacity: 0; transition: all 0.4s;       /* 淡入淡出 */
+            pointer-events: none;
             box-shadow: 0 8px 30px rgba(0,0,0,0.2);
         }
-        .toast.show { opacity: 1; top: 30px; }
+        .toast.show { opacity: 1; top: 30px; }      /* 显示时下移10px，有弹跳感 */
 
-        /* Loading spinner */
+        /* ================================================================
+           加载动画（spinner）
+           功能：数据加载中时显示的旋转圆圈
+           语法：border-top-color只上边有颜色 + @keyframes rotate360度旋转
+           ================================================================ */
         .spinner {
-            width: 40px; height: 40px; border: 3px solid #e0e0e0;
-            border-top-color: #ff6b6b; border-radius: 50%;
-            animation: spin 0.6s linear infinite; margin: 40px auto;
+            width: 40px; height: 40px;
+            border: 3px solid #e0e0e0;             /* 灰色圆环底 */
+            border-top-color: #ff6b6b;             /* 上边红色，形成缺角圆环 */
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;  /* 0.6秒一圈，匀速无限转 */
+            margin: 40px auto;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* 购物车数量角标：绝对定位在图标右上角 */
         .cart-count-badge {
             position: absolute; top: -8px; right: -8px;
             background: #ff6b6b; color: #fff; font-size: 11px;
@@ -198,21 +341,36 @@
 </head>
 <body class="min-h-screen">
 
-    <!-- Toast -->
+    <!-- ================================================================
+         Toast消息提示容器
+         功能：操作反馈提示（如"已添加到购物车"）
+         语法：初始opacity:0隐藏，JS动态添加.show类显示
+         ================================================================ -->
     <div class="toast" id="toast"></div>
 
-    <!-- Cart backdrop -->
+    <!-- ================================================================
+         购物车背景遮罩
+         功能：购物车打开时的半透明黑色遮罩，点击遮罩关闭购物车
+         语法：onclick事件绑定toggleCart()函数
+         ================================================================ -->
     <div class="cart-backdrop" id="cartBackdrop" onclick="toggleCart()"></div>
 
-    <!-- Cart sidebar -->
+    <!-- ================================================================
+         购物车侧边栏
+         功能：右侧滑出面板，展示已加购商品、修改数量、删除、结算
+         语法：flex布局，内部划分三个区域——标题栏、商品列表(flex-1撑满)、底部合计
+         ================================================================ -->
     <div class="cart-sidebar" id="cartSidebar">
+        <!-- 购物车标题栏 -->
         <div class="flex items-center justify-between p-5 border-b">
             <h3 class="font-bold text-lg">购物车 <span id="cartCountSide" class="text-red-500">(0)</span></h3>
             <button onclick="toggleCart()" class="text-gray-400 hover:text-gray-700 text-xl">&times;</button>
         </div>
+        <!-- 购物车商品列表：flex-1占满剩余空间，overflow-y-auto超出滚动 -->
         <div class="flex-1 overflow-y-auto p-5" id="cartItems">
             <p class="text-gray-400 text-center mt-10">购物车是空的</p>
         </div>
+        <!-- 购物车底部合计栏：默认隐藏，有商品时才显示 -->
         <div class="border-t p-5" id="cartFooter" style="display:none">
             <div class="flex justify-between font-bold text-lg mb-4">
                 <span>合计</span>
@@ -222,19 +380,27 @@
         </div>
     </div>
 
-    <!-- Login/Register modal -->
+    <!-- ================================================================
+         登录/注册弹窗
+         功能：点击导航栏"登录"按钮弹出，包含登录表单和注册表单的切换
+         语法：CSS .show类控制显示 + JS切换表单display:none/block + <form>表单元素
+         ================================================================ -->
     <div class="modal-overlay" id="authModal">
         <div class="modal-box">
+            <!-- 关闭按钮：absolute定位在卡片右上角 -->
             <button onclick="closeAuth()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">&times;</button>
+            <!-- 登录/注册切换标签 -->
             <div class="flex gap-4 mb-6" id="authTabs">
                 <button class="flex-1 py-2 font-semibold border-b-2 border-black" data-tab="login">登录</button>
                 <button class="flex-1 py-2 font-semibold border-b-2 border-transparent text-gray-400" data-tab="register">注册</button>
             </div>
+            <!-- 登录表单：onsubmit事件处理提交，e.preventDefault()阻止页面刷新 -->
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <input type="text" id="loginUser" placeholder="用户名" class="w-full border rounded-lg px-4 py-3 mb-3" required>
                 <input type="password" id="loginPass" placeholder="密码" class="w-full border rounded-lg px-4 py-3 mb-4" required>
                 <button type="submit" class="btn-primary w-full">登录</button>
             </form>
+            <!-- 注册表单：默认display:none隐藏，切换到注册时显示 -->
             <form id="registerForm" onsubmit="handleRegister(event)" style="display:none">
                 <input type="text" id="regUser" placeholder="用户名（3-20位）" class="w-full border rounded-lg px-4 py-3 mb-3" required minlength="3">
                 <input type="email" id="regEmail" placeholder="邮箱" class="w-full border rounded-lg px-4 py-3 mb-3" required>
@@ -244,19 +410,31 @@
         </div>
     </div>
 
-    <!-- ===== TOP BAR ===== -->
+    <!-- ================================================================
+         顶部公告栏
+         功能：滚动促销文字（纯静态展示，动画靠CSS @keyframes实现）
+         语法：Tailwind工具类：text-white、text-center、py-2、text-sm、font-medium、tracking-wide
+         ================================================================ -->
     <div class="announcement-bar text-white text-center py-2 text-sm font-medium tracking-wide">
         新用户首单享 9 折优惠 ｜ 满 ¥299 包邮 ｜ 限时新品 8 折起
     </div>
 
-    <!-- ===== NAV ===== -->
+    <!-- ================================================================
+         导航栏
+         功能：固定在页面上方的导航条，含品牌名、分类链接、搜索/收藏/购物车/登录按钮
+         语法：<nav>语义化标签 + sticky定位 + flex弹性布局 + onclick事件绑定JS函数
+               hidden md:flex = 移动端隐藏，中等屏幕以上显示（Tailwind响应式）
+         ================================================================ -->
     <nav class="nav-glass sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- 品牌Logo：点击回到首页（重置所有筛选） -->
             <a href="#" class="text-2xl font-extrabold tracking-tight" onclick="resetFilters()">
                 <span class="text-red-500">Trend</span><span class="text-gray-900">Shop</span>
             </a>
+            <!-- 分类导航链接：hidden在小屏隐藏，md:flex在中屏以上显示 -->
             <div class="hidden md:flex gap-8 text-sm font-medium text-gray-700">
                 <a href="#" class="hover:text-red-500 transition" onclick="resetFilters()">首页</a>
+                <!-- onclick调用filterCategory()函数，传入分类名进行筛选 -->
                 <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('男装')">男装</a>
                 <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('女装')">女装</a>
                 <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('鞋履')">鞋履</a>
@@ -264,17 +442,24 @@
                 <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('配饰')">配饰</a>
                 <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('数码')">数码</a>
             </div>
+            <!-- 右侧工具栏 -->
             <div class="flex items-center gap-4">
-                <button class="relative text-gray-700 hover:text-red-500 transition" onclick="document.getElementById('searchInput').focus();document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+                <!-- 搜索按钮：点击滚动到商品区并聚焦搜索框 -->
+                <button class="relative text-gray-700 hover:text-red-500 transition"
+                    onclick="document.getElementById('searchInput').focus();document.getElementById('products').scrollIntoView({behavior:'smooth'})">
                     <i class="fa fa-search text-lg"></i>
                 </button>
-                <button class="relative text-gray-700 hover:text-red-500 transition" id="wishlistBtn" title="心愿单" onclick="toggleAuthOr('wishlist')">
+                <!-- 心愿单按钮 -->
+                <button class="relative text-gray-700 hover:text-red-500 transition" id="wishlistBtn" title="心愿单"
+                    onclick="toggleAuthOr('wishlist')">
                     <i class="fa fa-heart-o text-lg"></i>
                 </button>
+                <!-- 购物车按钮：带数量角标（默认隐藏，有商品时显示） -->
                 <button class="relative text-gray-700 hover:text-red-500 transition" onclick="toggleCart()">
                     <i class="fa fa-shopping-bag text-lg"></i>
                     <span class="cart-count-badge" id="cartBadge" style="display:none">0</span>
                 </button>
+                <!-- 用户区域：JS动态渲染，未登录显示"登录"，已登录显示用户名+下拉菜单 -->
                 <span id="userArea">
                     <button class="text-sm text-gray-600 hover:text-red-500 transition font-medium" onclick="openAuth()">
                         <i class="fa fa-user-circle mr-1"></i>登录
@@ -284,37 +469,51 @@
         </div>
     </nav>
 
-    <!-- ===== HERO ===== -->
+    <!-- ================================================================
+         Hero主视觉区
+         功能：首页大横幅，展示品牌口号 + 统计数据 + 浮动装饰卡片
+         语法：<section>语义化分区标签 + flex响应式布局（flex-col在手机上竖排，md:flex-row在桌面上横排）
+               reveal类用于滚动入场动画
+         ================================================================ -->
     <section class="hero-gradient text-white relative z-10">
         <div class="max-w-7xl mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center gap-12 relative z-10">
+            <!-- 左侧文字区 -->
             <div class="flex-1 reveal">
                 <span class="badge-hot text-sm px-4 py-1.5 rounded-full">2026 春夏系列</span>
                 <h1 class="text-[clamp(2.5rem,6vw,4rem)] font-extrabold leading-tight mt-4">
-                    焕新你的 <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-yellow-300">时尚风格</span>
+                    焕新你的 <br>
+                    <!-- 渐变色文字：bg-gradient-to-r从红到黄 + bg-clip-text裁剪到文字 + text-transparent透明填充 -->
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-yellow-300">时尚风格</span>
                 </h1>
                 <p class="text-gray-300 mt-4 text-lg max-w-md leading-relaxed">
                     精选全球设计师品牌，为你打造独一无二的潮流穿搭
                 </p>
                 <div class="mt-8 flex gap-4">
+                    <!-- scrollIntoView({behavior:'smooth'})平滑滚动到商品区 -->
                     <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">立即选购</button>
                     <button class="btn-outline" onclick="filterCategory('女装')">查看合集</button>
                 </div>
+                <!-- 统计数据：stat-number类实现渐变文字 -->
                 <div class="mt-10 flex gap-8">
                     <div><div class="stat-number">50K+</div><div class="text-gray-400 text-sm mt-1">满意用户</div></div>
                     <div><div class="stat-number">200+</div><div class="text-gray-400 text-sm mt-1">设计师品牌</div></div>
                     <div><div class="stat-number">24h</div><div class="text-gray-400 text-sm mt-1">快速发货</div></div>
                 </div>
             </div>
+            <!-- 右侧图片区 + 浮动卡片 -->
             <div class="flex-1 reveal">
                 <div class="relative">
+                    <!-- 装饰性圆角方框 -->
                     <div class="w-full h-80 md:h-96 rounded-3xl bg-gradient-to-br from-red-400/30 via-purple-400/20 to-yellow-300/30 flex items-center justify-center border border-white/10">
                         <i class="fa fa-shopping-bag text-8xl text-white/20"></i>
                     </div>
+                    <!-- 浮动卡片1：绝对定位在左下角，backdrop-blur-xl毛玻璃背景 -->
                     <div class="absolute -bottom-4 -left-4 bg-white/10 backdrop-blur-xl rounded-2xl p-4 border border-white/20 text-sm">
                         <p class="text-white/70 text-xs">今日热销</p>
                         <p class="font-bold text-lg">¥<span class="text-yellow-300">299</span></p>
                         <p class="text-white/50 text-xs">限量 100 件</p>
                     </div>
+                    <!-- 浮动卡片2：绝对定位在右上角 -->
                     <div class="absolute -top-4 -right-4 bg-white/10 backdrop-blur-xl rounded-2xl p-3 border border-white/20">
                         <i class="fa fa-star text-yellow-400 text-xl"></i>
                         <p class="text-xs mt-1 font-bold">4.9</p>
@@ -325,9 +524,15 @@
         </div>
     </section>
 
-    <!-- ===== BRAND MARQUEE ===== -->
+    <!-- ================================================================
+         品牌走马灯
+         功能：品牌名称从左到右无限滚动，展示合作品牌
+         语法：overflow:hidden裁剪超出的跑马灯内容 + CSS @keyframes marquee无限循环动画
+               内容复制两份确保无缝循环（第一份末尾 + 第二份开头）
+         ================================================================ -->
     <section class="py-10 bg-white border-y border-gray-100 overflow-hidden">
         <div class="marquee-track">
+            <!-- 第一组8个品牌 -->
             <span class="text-gray-300 text-2xl font-bold mx-10">NIKE</span>
             <span class="text-gray-300 text-2xl font-bold mx-10">ADIDAS</span>
             <span class="text-gray-300 text-2xl font-bold mx-10">ZARA</span>
@@ -336,6 +541,7 @@
             <span class="text-gray-300 text-2xl font-bold mx-10">GUCCI</span>
             <span class="text-gray-300 text-2xl font-bold mx-10">PRADA</span>
             <span class="text-gray-300 text-2xl font-bold mx-10">DIOR</span>
+            <!-- 第二组重复：确保动画循环时中间不出现空白 -->
             <span class="text-gray-300 text-2xl font-bold mx-10">NIKE</span>
             <span class="text-gray-300 text-2xl font-bold mx-10">ADIDAS</span>
             <span class="text-gray-300 text-2xl font-bold mx-10">ZARA</span>
@@ -347,15 +553,25 @@
         </div>
     </section>
 
-    <!-- ===== PRODUCTS ===== -->
+    <!-- ================================================================
+         商品展示区
+         功能：搜索框 + 排序选择 + 分类标签 + 商品网格 + 加载更多
+         语法：CSS Grid网格布局（grid sm:grid-cols-2 lg:grid-cols-4 = 小屏2列，大屏4列）
+               <input>文本输入 + <select>下拉选择 + JS动态渲染商品卡片
+         ================================================================ -->
     <section class="py-16 max-w-7xl mx-auto px-6" id="products">
+        <!-- 标题区 + 搜索和排序 -->
         <div class="text-center mb-10 reveal">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">热门商品</h2>
             <p class="text-gray-500 mt-2">为你精选的潮流单品</p>
             <div class="mt-4 flex justify-center gap-2">
-                <input type="text" id="searchInput" placeholder="搜索商品..." class="border rounded-full px-5 py-2 text-sm w-64 focus:outline-none focus:border-red-400"
+                <!-- 搜索框：oninput事件触发防抖搜索（debounceSearch） -->
+                <input type="text" id="searchInput" placeholder="搜索商品..."
+                    class="border rounded-full px-5 py-2 text-sm w-64 focus:outline-none focus:border-red-400"
                     oninput="debounceSearch()">
-                <select id="sortSelect" class="border rounded-full px-4 py-2 text-sm text-gray-600 focus:outline-none" onchange="loadProducts()">
+                <!-- 排序下拉：onchange事件触发重新加载 -->
+                <select id="sortSelect" class="border rounded-full px-4 py-2 text-sm text-gray-600 focus:outline-none"
+                    onchange="loadProducts()">
                     <option value="">默认排序</option>
                     <option value="price-asc">价格从低到高</option>
                     <option value="price-desc">价格从高到低</option>
@@ -365,22 +581,27 @@
             </div>
         </div>
 
-        <!-- Category chips -->
+        <!-- 分类标签：JS动态从API获取分类列表并渲染，data-cat存储分类名 -->
         <div class="flex flex-wrap justify-center gap-3 mb-10 reveal" id="categoryChips">
             <span class="category-chip active" data-cat="">全部</span>
         </div>
 
-        <!-- Product grid -->
+        <!-- 商品网格：JS动态渲染商品卡片到此容器内 -->
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="productGrid">
             <div class="col-span-full"><div class="spinner"></div></div>
         </div>
 
+        <!-- 加载更多按钮：当还有未加载的商品时显示，全部加载完后隐藏 -->
         <div class="text-center mt-10 reveal" id="loadMoreWrap">
             <button class="btn-primary text-lg px-10 py-3" onclick="loadMore()" id="loadMoreBtn">查看更多商品</button>
         </div>
     </section>
 
-    <!-- ===== FEATURES ===== -->
+    <!-- ================================================================
+         特色区域
+         功能：展示三个服务承诺卡片（免费配送、正品保障、无忧退换）
+         语法：CSS Grid三列布局，每个卡片是flex-col居中排列的图标+标题+描述
+         ================================================================ -->
     <section class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid md:grid-cols-3 gap-8 reveal">
@@ -409,14 +630,20 @@
         </div>
     </section>
 
-    <!-- ===== FOOTER ===== -->
+    <!-- ================================================================
+         页脚
+         功能：四列信息展示——品牌介绍、购物指南、配送说明、联系方式
+         语法：<footer>语义化标签 + CSS Grid四列布局 + Font Awesome图标
+         ================================================================ -->
     <footer class="footer-gradient text-white py-12">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid md:grid-cols-4 gap-8">
+                <!-- 品牌介绍 -->
                 <div>
                     <h3 class="text-xl font-extrabold"><span class="text-red-500">Trend</span>Shop</h3>
                     <p class="text-gray-400 text-sm mt-3 leading-relaxed">潮流在线商城，精选全球设计师品牌，为你带来最新时尚单品。</p>
                 </div>
+                <!-- 购物指南：<ul>无序列表 + space-y-2垂直间距 -->
                 <div>
                     <h4 class="font-semibold mb-4">购物指南</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
@@ -426,6 +653,7 @@
                         <li><a href="#" class="hover:text-white transition">积分规则</a></li>
                     </ul>
                 </div>
+                <!-- 配送说明 -->
                 <div>
                     <h4 class="font-semibold mb-4">配送说明</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
@@ -435,6 +663,7 @@
                         <li><a href="#" class="hover:text-white transition">物流查询</a></li>
                     </ul>
                 </div>
+                <!-- 联系方式 + 社交图标 -->
                 <div>
                     <h4 class="font-semibold mb-4">联系我们</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
@@ -442,6 +671,7 @@
                         <li><i class="fa fa-phone mr-2 text-red-400"></i>400-888-8888</li>
                         <li><i class="fa fa-clock-o mr-2 text-red-400"></i>9:00 - 22:00</li>
                     </ul>
+                    <!-- 社交图标：flex横向排列 -->
                     <div class="flex gap-4 mt-4 text-lg">
                         <a href="#" class="text-gray-400 hover:text-red-400 transition"><i class="fa fa-weibo"></i></a>
                         <a href="#" class="text-gray-400 hover:text-red-400 transition"><i class="fa fa-wechat"></i></a>
@@ -449,39 +679,74 @@
                     </div>
                 </div>
             </div>
+            <!-- 版权信息：border-t上边框分割 -->
             <div class="border-t border-white/10 mt-8 pt-8 text-center text-sm text-gray-500">
                 &copy; 2026 TrendShop. All rights reserved.
             </div>
         </div>
     </footer>
 
-    <!-- ===== SCRIPTS ===== -->
+    <!-- ================================================================
+         下面是所有JavaScript逻辑代码
+         框架/技术：原生JavaScript（Vanilla JS），无框架依赖
+         主要用到的API：Fetch API（网络请求）、localStorage（本地存储）、
+         IntersectionObserver（滚动监听）、DOM操作
+         ================================================================ -->
     <script>
-    // ─── CONFIG ───────────────────────────────────────────────────────────────
+    // ================================================================
+    // 全局配置变量
+    // 功能：定义API地址、分页/筛选/用户状态等全局变量
+    // 语法：const声明常量，let声明可变变量
+    // API地址：隧道重启后需要更新这里
+    // ================================================================
     const API = 'https://dirt-dana-cuisine-evans.trycloudflare.com/api';
     let currentPage = 1, currentCategory = '', currentSort = '', currentKeyword = '';
     let cartOpen = false, userToken = '', userInfo = null;
     let allCategories = [];
 
-    // ─── HELPERS ──────────────────────────────────────────────────────────────
 
+    // ================================================================
+    // 工具函数——toast(msg)
+    // 功能：页面顶部弹出2秒后自动消失的提示信息
+    // 语法：DOM操作获取元素 → 修改textContent → 添加CSS类名触发动画
+    //       setTimeout延时执行 → clearTimeout取消上次定时器（防止连续点击堆积）
+    // ================================================================
     function toast(msg) {
-        const el = document.getElementById('toast');
-        el.textContent = msg;
-        el.classList.add('show');
-        clearTimeout(el._t);
-        el._t = setTimeout(() => el.classList.remove('show'), 2000);
+        const el = document.getElementById('toast');       // 【DOM API】getElementById获取DOM元素
+        el.textContent = msg;                               // 设置文本内容（比innerHTML安全，防止XSS）
+        el.classList.add('show');                           // 【classList API】添加.show类触发CSS淡入动画
+        clearTimeout(el._t);                                // 清除上一次的定时器，防止提示被提前关掉
+        el._t = setTimeout(() => el.classList.remove('show'), 2000); // 2秒后移除.show类自动隐藏
     }
 
+
+    // ================================================================
+    // 工具函数——api(url, options)
+    // 功能：封装Fetch API，自动添加JWT认证头、处理JSON
+    // 语法：async/await异步函数 + fetch()网络请求 + 三元运算符
+    //       ...展开运算符合并对象 + if条件判断添加Authorization头
+    // ================================================================
     async function api(url, options = {}) {
-        const headers = { 'Content-Type': 'application/json' };
-        if (userToken) headers['Authorization'] = 'Bearer ' + userToken;
-        const res = await fetch(API + url, { ...options, headers });
-        return res.json();
+        const headers = { 'Content-Type': 'application/json' };  // 默认JSON请求头
+        if (userToken) headers['Authorization'] = 'Bearer ' + userToken; // JWT认证：Bearer + token
+        const res = await fetch(API + url, { ...options, headers });     // 【Fetch API】发起HTTP请求
+        return res.json();                                                // 解析JSON响应
     }
 
+
+    // ================================================================
+    // 工具函数——formatPrice(n)
+    // 功能：数字转价格格式（如 129 → ¥129）
+    // 语法：Number()强制类型转换 + toFixed(0)保留0位小数 + 模板字符串拼接¥符号
+    // ================================================================
     function formatPrice(n) { return '¥' + Number(n).toFixed(0); }
 
+
+    // ================================================================
+    // 图标映射表（iconMap）+ 颜色列表（colorMap）
+    // 功能：根据商品image字段映射对应的Font Awesome图标类名和背景渐变色
+    // 语法：对象字面量{}键值对映射 + 数组[]存储Tailwind渐变色类名
+    // ================================================================
     const iconMap = {
         tshirt: 'fa-tshirt', bag: 'fa-shopping-bag', headphone: 'fa-headphones',
         watch: 'fa-clock-o', sunglass: 'fa-sun-o', phonecase: 'fa-mobile',
@@ -499,18 +764,31 @@
         'from-cyan-50 to-teal-100 text-teal-300',
     ];
 
+    // 根据商品ID取模循环使用颜色，确保每个卡片颜色不同但可重复
     function cardGradient(i) { return colorMap[i % colorMap.length]; }
 
-    // ─── AUTH ─────────────────────────────────────────────────────────────────
 
+    // ================================================================
+    // 认证模块（AUTH）
+    // 功能：登录弹窗开关、登录/注册表单切换、登录请求、注册请求、登出、用户UI更新
+    // 语法：classList操作 + addEventListener事件委托 + async/await异步 + localStorage持久化
+    // ================================================================
+
+    // 打开登录弹窗：给.modal-overlay添加.show类（CSS控制opacity和pointer-events）
     function openAuth() { document.getElementById('authModal').classList.add('show'); }
+    // 关闭登录弹窗：移除.show类
     function closeAuth() { document.getElementById('authModal').classList.remove('show'); }
 
+    // 登录/注册标签切换
+    // 语法：addEventListener事件监听 + 事件委托（e.target判断点击的是哪个按钮）
+    //       dataset.tab读取data-tab属性 + 三元表达式控制display
     document.getElementById('authTabs').addEventListener('click', function(e) {
-        if (e.target.tagName !== 'BUTTON') return;
-        const isLogin = e.target.dataset.tab === 'login';
+        if (e.target.tagName !== 'BUTTON') return;              // 只处理按钮点击
+        const isLogin = e.target.dataset.tab === 'login';       // data-tab属性判断是登录还是注册
+        // 切换表单显示：登录时显示loginForm隐藏registerForm，反之亦然
         document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
         document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
+        // 切换标签下划线样式：当前激活的标签下划线为黑色，另一个为透明
         this.querySelectorAll('button').forEach((b, i) => {
             b.className = (i === 0 && isLogin) || (i === 1 && !isLogin)
                 ? 'flex-1 py-2 font-semibold border-b-2 border-black'
@@ -518,28 +796,32 @@
         });
     });
 
+    // 处理登录
+    // 语法：async/await等待API响应 + e.preventDefault()阻止表单默认提交行为
+    //       localStorage.setItem()持久化存储token和用户信息
     async function handleLogin(e) {
-        e.preventDefault();
+        e.preventDefault();                                     // 阻止表单默认提交（防止页面刷新）
         const username = document.getElementById('loginUser').value;
         const password = document.getElementById('loginPass').value;
-        const res = await api('/auth/login', {
+        const res = await api('/auth/login', {                  // 调用后端登录接口
             method: 'POST',
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ username, password }),       // JSON.stringify()对象转JSON字符串
         });
-        if (res.code === 200) {
+        if (res.code === 200) {                                 // 登录成功
             userToken = res.data.token;
             userInfo = res.data.user;
-            localStorage.setItem('trendshop_token', userToken);
-            localStorage.setItem('trendshop_user', JSON.stringify(userInfo));
+            localStorage.setItem('trendshop_token', userToken);  // 【localStorage API】持久化存储token
+            localStorage.setItem('trendshop_user', JSON.stringify(userInfo)); // 存储用户信息（需转为JSON字符串）
             closeAuth();
-            updateUserUI();
-            loadCart();
+            updateUserUI();                                      // 更新导航栏用户区域
+            loadCart();                                          // 加载购物车
             toast('登录成功，欢迎回来！');
         } else {
-            toast(res.message);
+            toast(res.message);                                  // 显示错误信息
         }
     }
 
+    // 处理注册
     async function handleRegister(e) {
         e.preventDefault();
         const username = document.getElementById('regUser').value;
@@ -549,8 +831,9 @@
             method: 'POST',
             body: JSON.stringify({ username, email, password }),
         });
-        if (res.code === 201) {
+        if (res.code === 201) {                                  // 201 = 创建成功
             toast('注册成功，请登录');
+            // 自动切换到登录标签，并填入刚注册的用户名
             document.getElementById('authTabs').querySelector('[data-tab="login"]').click();
             document.getElementById('loginUser').value = username;
         } else {
@@ -558,6 +841,8 @@
         }
     }
 
+    // 登出
+    // 语法：localStorage.removeItem()清除存储 + 重置全局变量
     function logout() {
         userToken = ''; userInfo = null;
         localStorage.removeItem('trendshop_token');
@@ -567,12 +852,17 @@
         toast('已退出登录');
     }
 
+    // 更新导航栏用户区域UI
+    // 功能：根据登录状态动态渲染——未登录显示"登录"按钮，已登录显示用户名+下拉菜单
+    // 语法：innerHTML直接替换HTML内容 + 模板字符串动态插入变量 + 三元表达式判断角色
     function updateUserUI() {
         const area = document.getElementById('userArea');
         if (userInfo) {
+            // 已登录：渲染用户名 + 下拉菜单（我的订单、退出登录）
             area.innerHTML = `
                 <div class="relative inline-block" id="userMenuWrap">
-                    <button class="text-sm text-gray-700 font-medium hover:text-red-500 transition" onclick="document.getElementById('userDropdown').classList.toggle('hidden')">
+                    <button class="text-sm text-gray-700 font-medium hover:text-red-500 transition"
+                        onclick="document.getElementById('userDropdown').classList.toggle('hidden')">
                         <i class="fa fa-user-circle mr-1"></i>${userInfo.username}
                     </button>
                     <div id="userDropdown" class="hidden absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border py-2 min-w-[140px] z-50">
@@ -582,16 +872,19 @@
                     </div>
                 </div>`;
         } else {
+            // 未登录：只显示登录按钮
             area.innerHTML = `<button class="text-sm text-gray-600 hover:text-red-500 transition font-medium" onclick="openAuth()"><i class="fa fa-user-circle mr-1"></i>登录</button>`;
         }
     }
 
+    // 需要登录才能使用的功能：如果未登录则弹出登录窗口
     function toggleAuthOr(action) {
         if (!userToken) { openAuth(); return; }
         if (action === 'wishlist') alert('心愿单功能开发中，敬请期待！');
     }
 
-    // Close dropdown on outside click
+    // 点击页面空白处关闭用户下拉菜单
+    // 语法：全局document点击事件 + closest()向上查找父元素判断点击是否在菜单内
     document.addEventListener('click', function(e) {
         const dd = document.getElementById('userDropdown');
         if (dd && !dd.classList.contains('hidden') && !e.target.closest('#userMenuWrap')) {
@@ -599,34 +892,44 @@
         }
     });
 
-    // ─── PRODUCTS ─────────────────────────────────────────────────────────────
+
+    // ================================================================
+    // 商品模块（PRODUCTS）
+    // 功能：从API加载商品列表 → 动态渲染商品卡片 → 分类筛选 → 搜索 → 排序 → 加载更多
+    // 语法：URLSearchParams构建查询参数 + createElement动态创建DOM + forEach遍历
+    //       async/await异步请求 + 模板字符串生成HTML
+    // ================================================================
 
     async function loadProducts(append = false) {
+        // 非追加模式（首次加载或切换筛选条件）：重置页码，显示加载动画
         if (!append) {
             currentPage = 1;
             document.getElementById('productGrid').innerHTML = '<div class="col-span-full"><div class="spinner"></div></div>';
         }
 
+        // 【URLSearchParams API】构建URL查询字符串：?page=1&pageSize=12&category=男装&keyword=T恤&sort=price-asc
         const params = new URLSearchParams({ page: currentPage, pageSize: 12 });
         if (currentCategory) params.set('category', currentCategory);
         if (currentKeyword) params.set('keyword', currentKeyword);
         if (currentSort) params.set('sort', currentSort);
 
-        const res = await api('/products?' + params.toString());
+        const res = await api('/products?' + params.toString()); // 请求后端API
         if (res.code !== 200) return;
 
-        const { list, pagination } = res.data;
+        const { list, pagination } = res.data;    // 【解构赋值】提取list和pagination
         const grid = document.getElementById('productGrid');
 
-        if (!append) grid.innerHTML = '';
+        if (!append) grid.innerHTML = '';         // 非追加模式：清空旧内容
         if (list.length === 0 && !append) {
             grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10">没有找到商品</div>';
         }
 
+        // 遍历商品列表，为每个商品创建卡片DOM
+        // 语法：forEach遍历 + document.createElement创建元素 + innerHTML设置内容 + appendChild插入
         list.forEach((p, i) => {
-            const icon = iconMap[p.image] || 'fa-cube';
-            const gradient = cardGradient(p.id);
-            const card = document.createElement('div');
+            const icon = iconMap[p.image] || 'fa-cube';      // 查映射表获取图标，没匹配到用时默认cube图标
+            const gradient = cardGradient(p.id);              // 根据ID取模选择渐变色
+            const card = document.createElement('div');        // 【DOM API】动态创建div元素
             card.className = 'product-card reveal';
             card.innerHTML = `
                 <div class="img-wrap h-56 bg-gradient-to-br ${gradient} flex items-center justify-center">
@@ -648,58 +951,56 @@
                         <button class="btn-cart" onclick="addToCart(${p.id}, this)" title="加入购物车"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>`;
-            grid.appendChild(card);
+            grid.appendChild(card);                             // 将卡片插入商品网格
         });
 
-        // Handle load more button
+        // 控制"加载更多"按钮的显示：当前页 >= 总页数则隐藏
         const loadWrap = document.getElementById('loadMoreWrap');
-        if (pagination.page >= pagination.totalPages) {
-            loadWrap.style.display = 'none';
-        } else {
-            loadWrap.style.display = '';
-        }
+        loadWrap.style.display = pagination.page >= pagination.totalPages ? 'none' : '';
 
-        // Re-trigger reveal animations
+        // 重新触发滚动入场动画：新增的card带reveal类，需要手动触发可见性检测
         setTimeout(() => {
             document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+                // getBoundingClientRect().top：获取元素顶部相对于视口的位置
                 if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
             });
         }, 100);
 
-        // Update cart button states
-        updateCartButtonStates();
+        updateCartButtonStates();                               // 更新购物车图标状态（标记已加购商品）
     }
 
-    function loadMore() {
-        currentPage++;
-        loadProducts(true);
-    }
+    // 加载更多：页码+1，以追加模式加载
+    function loadMore() { currentPage++; loadProducts(true); }
 
+    // 加载分类列表：从API获取所有分类 → 动态生成分类标签
     async function loadCategories() {
         const res = await api('/products/categories');
         if (res.code !== 200) return;
         allCategories = res.data;
         const container = document.getElementById('categoryChips');
+        // 先放"全部"标签
         container.innerHTML = '<span class="category-chip active" data-cat="" onclick="filterCategory(\'\')">全部</span>';
         allCategories.forEach(cat => {
             const chip = document.createElement('span');
             chip.className = 'category-chip';
             chip.textContent = cat;
-            chip.dataset.cat = cat;
+            chip.dataset.cat = cat;        // dataset存储分类名，供filterCategory读取
             chip.onclick = () => filterCategory(cat);
             container.appendChild(chip);
         });
     }
 
+    // 分类筛选：更新active样式 → 滚动到商品区 → 重新加载
     function filterCategory(cat) {
         currentCategory = cat;
         document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
-        const chip = document.querySelector(`[data-cat="${cat}"]`);
+        const chip = document.querySelector(`[data-cat="${cat}"]`); // 【属性选择器】通过data-cat查找对应标签
         if (chip) chip.classList.add('active');
-        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' }); // 平滑滚动
         loadProducts();
     }
 
+    // 重置所有筛选条件
     function resetFilters() {
         currentCategory = ''; currentKeyword = ''; currentSort = '';
         document.getElementById('searchInput').value = '';
@@ -708,33 +1009,43 @@
         loadProducts();
     }
 
+    // 防抖搜索（debounce）
+    // 功能：用户停止输入400ms后才发起搜索，避免每按一个键就发一次请求
+    // 语法：clearTimeout取消上次定时器 + setTimeout延迟执行 → 闭包保存timer变量
     let searchTimer;
     function debounceSearch() {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => {
-            currentKeyword = document.getElementById('searchInput').value.trim();
+        clearTimeout(searchTimer);                              // 取消上一次的定时器
+        searchTimer = setTimeout(() => {                        // 400ms后执行搜索
+            currentKeyword = document.getElementById('searchInput').value.trim(); // trim()去除首尾空格
             loadProducts();
         }, 400);
     }
 
-    // ─── CART ─────────────────────────────────────────────────────────────────
 
+    // ================================================================
+    // 购物车模块（CART）
+    // 功能：侧边栏开关、加载购物车、渲染购物车列表、添加商品、修改数量、删除、结算
+    // 语法：classList.toggle切换CSS类 + Array.map()映射渲染 + 模板字符串 + async/await
+    // ================================================================
+
+    // 切换购物车侧边栏开关
     function toggleCart() {
-        cartOpen = !cartOpen;
+        cartOpen = !cartOpen;                                   // 状态取反
         document.getElementById('cartSidebar').classList.toggle('show', cartOpen);
         document.getElementById('cartBackdrop').classList.toggle('show', cartOpen);
-        if (cartOpen) loadCart();
+        if (cartOpen) loadCart();                               // 打开时加载最新购物车数据
     }
 
     async function loadCart() {
         if (!userToken) {
-            renderCart({ items: [], total: 0, count: 0 });
+            renderCart({ items: [], total: 0, count: 0 });      // 未登录显示空购物车
             return;
         }
         const res = await api('/cart');
         if (res.code === 200) renderCart(res.data);
     }
 
+    // 渲染购物车内容
     function renderCart(cart) {
         const itemsEl = document.getElementById('cartItems');
         const footerEl = document.getElementById('cartFooter');
@@ -743,24 +1054,26 @@
         const badge = document.getElementById('cartBadge');
 
         countSide.textContent = `(${cart.count})`;
+        // 更新导航栏购物车角标数字
         if (cart.count > 0) {
             badge.textContent = cart.count;
-            badge.style.display = 'flex';
+            badge.style.display = 'flex';                       // 显示角标
         } else {
-            badge.style.display = 'none';
+            badge.style.display = 'none';                       // 隐藏角标
         }
 
         if (cart.items.length === 0) {
             itemsEl.innerHTML = '<p class="text-gray-400 text-center mt-10">购物车是空的</p>';
-            footerEl.style.display = 'none';
+            footerEl.style.display = 'none';                    // 隐藏底部合计栏
         } else {
+            // Array.map()遍历商品 → 模板字符串生成HTML → join('')合并为字符串
             itemsEl.innerHTML = cart.items.map(item => `
                 <div class="flex gap-3 mb-4 pb-4 border-b">
                     <div class="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
                         <i class="fa ${iconMap[item.image] || 'fa-cube'} text-2xl text-gray-400"></i>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="font-medium text-sm truncate">${item.name}</p>
+                        <p class="font-medium text-sm truncate">${item.name}</p>     <!-- truncate类：文字溢出省略号 -->
                         <p class="text-red-500 font-bold">${formatPrice(item.price)}</p>
                         <div class="flex items-center gap-2 mt-1">
                             <button class="w-6 h-6 rounded-full border text-xs" onclick="updateCartQty(${item.productId}, ${item.quantity - 1})">-</button>
@@ -770,7 +1083,7 @@
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `).join('');                                        // join('')把数组拼成无分隔符的纯字符串
             footerEl.style.display = '';
             totalEl.textContent = formatPrice(cart.total);
         }
@@ -784,8 +1097,8 @@
             body: JSON.stringify({ productId, quantity: 1 }),
         });
         if (res.code === 200) {
-            loadCart();
-            // Button animation
+            loadCart();                                         // 重新加载购物车
+            // 按钮动画：变绿 + 显示对勾 1秒后恢复
             if (btn) {
                 btn.classList.add('in-cart');
                 btn.innerHTML = '<i class="fa fa-check"></i>';
@@ -801,6 +1114,7 @@
         }
     }
 
+    // 更新购物车中某件商品的数量（传0 = 删除）
     async function updateCartQty(productId, quantity) {
         const res = await api('/cart/' + productId, {
             method: 'PUT',
@@ -809,24 +1123,15 @@
         if (res.code === 200) loadCart();
     }
 
+    // 结算：弹出地址和备注输入框 → 提交订单 → 清空购物车 → 刷新商品列表
     async function checkout() {
         if (!userToken) return;
-        const res = await api('/orders', {
-            method: 'POST',
-            body: JSON.stringify({
-                items: [], // Will be filled from cart
-                address: userInfo?.profile?.address || '请填写收货地址',
-                note: '',
-            }),
-        });
-
-        // Actually, we need cart items. Let's get the cart first and submit.
+        // 先获取购物车内容
         const cartRes = await api('/cart');
         if (cartRes.code !== 200 || cartRes.data.items.length === 0) {
-            toast('购物车为空');
-            return;
+            toast('购物车为空'); return;
         }
-
+        // prompt()弹出浏览器原生输入框让用户填写地址和备注
         const orderRes = await api('/orders', {
             method: 'POST',
             body: JSON.stringify({
@@ -835,63 +1140,66 @@
                 note: prompt('订单备注（可选）：', '') || '',
             }),
         });
-
         if (orderRes.code === 201) {
-            loadCart();
-            toggleCart();
-            loadProducts(); // Refresh stock
+            loadCart(); toggleCart(); loadProducts();           // 刷新购物车、关闭侧栏、刷新商品库存
             toast('下单成功！订单号：' + orderRes.data.id);
         } else {
             toast(orderRes.message);
         }
     }
 
+    // 更新商品卡片上"加购按钮"的状态：已在购物车中的商品按钮变绿
     function updateCartButtonStates() {
-        // This updates the "+" buttons to show check if the product is in cart
         if (!userToken) return;
-        api('/cart').then(res => {
+        api('/cart').then(res => {                              // Promise.then()链式调用
             if (res.code !== 200) return;
-            const cartIds = new Set(res.data.items.map(i => i.productId));
+            const cartIds = new Set(res.data.items.map(i => i.productId)); // 【Set数据结构】快速去重查找
             document.querySelectorAll('.btn-cart').forEach(btn => {
                 const onclick = btn.getAttribute('onclick') || '';
-                const match = onclick.match(/addToCart\((\d+)/);
+                const match = onclick.match(/addToCart\((\d+)/); // 【正则表达式】从onclick属性中提取productId
                 if (match && cartIds.has(parseInt(match[1]))) {
-                    btn.classList.add('in-cart');
+                    btn.classList.add('in-cart');               // 已在购物车 → 变绿
                 }
             });
         });
     }
 
-    // ─── INIT ─────────────────────────────────────────────────────────────────
 
+    // ================================================================
+    // 初始化函数（INIT）
+    // 功能：页面加载时恢复登录状态 → 加载分类和商品 → 初始化滚动动画和弹窗事件
+    // 语法：localStorage.getItem()读取持久化数据 + JSON.parse()解析JSON
+    //       IntersectionObserver API实现滚动入场动画
+    // ================================================================
     function init() {
-        // Restore auth
+        // 从localStorage恢复登录状态（页面刷新后保持登录）
         const savedToken = localStorage.getItem('trendshop_token');
         const savedUser = localStorage.getItem('trendshop_user');
         if (savedToken && savedUser) {
             userToken = savedToken;
-            try { userInfo = JSON.parse(savedUser); } catch { userInfo = null; }
+            try { userInfo = JSON.parse(savedUser); } catch { userInfo = null; } // try-catch防止JSON解析异常
         }
         updateUserUI();
-        loadCategories();
-        loadProducts();
-        loadCart();
+        loadCategories();                                       // 加载商品分类标签
+        loadProducts();                                         // 加载商品列表
+        loadCart();                                             // 加载购物车
 
-        // Scroll reveal
+        // 【IntersectionObserver API】滚动监听：当元素进入视口时自动添加.visible类触发CSS动画
+        // 优势：相比scroll事件性能更好，浏览器原生支持，不会阻塞主线程
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('visible');
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' }); // threshold: 10%可见时触发
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); // observe每个带reveal类的元素
 
-        // Modal close on overlay click
+        // 点击弹窗遮罩关闭弹窗（点遮罩本身关闭，点内部卡片不关闭）
         document.getElementById('authModal').addEventListener('click', function(e) {
-            if (e.target === this) closeAuth();
+            if (e.target === this) closeAuth();                 // e.target === this 确保点击的是遮罩本身而非子元素
         });
     }
 
-    init();
+    init();                                                     // 页面加载完成后执行初始化
     </script>
 </body>
 </html>
