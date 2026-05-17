@@ -4,7 +4,7 @@ const config = require('./config');
 const errorHandler = require('./middleware/errorHandler');
 
 // Ensure db is initialized (creates data file, seeds products & default admin)
-require('./db');
+const db = require('./db');
 
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
@@ -36,6 +36,20 @@ app.get('/api/health', (_req, res) => {
 // Error handler
 app.use(errorHandler);
 
-app.listen(config.port, () => {
+const server = app.listen(config.port, () => {
   console.log(`TrendShop API running at http://localhost:${config.port}`);
 });
+
+// Graceful shutdown — close DB so WAL is checkpointed to .db file
+function shutdown(signal) {
+  console.log(`\nReceived ${signal}, shutting down gracefully...`);
+  server.close(() => {
+    db.close();
+    console.log('Database closed. Goodbye.');
+    process.exit(0);
+  });
+  setTimeout(() => process.exit(1), 5000); // force exit after 5s
+}
+
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));

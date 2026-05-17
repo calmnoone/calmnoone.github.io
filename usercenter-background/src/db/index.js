@@ -11,7 +11,7 @@ const dir = path.dirname(DB_PATH);
 if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
 const db = new DatabaseSync(DB_PATH);
-db.exec('PRAGMA journal_mode = WAL');
+db.exec('PRAGMA journal_mode = DELETE');
 db.exec('PRAGMA foreign_keys = ON');
 
 // ─── Schema ─────────────────────────────────────────────────────────────────
@@ -445,5 +445,9 @@ module.exports = {
   removeFromWishlist(userId, productId) {
     db.prepare('DELETE FROM wishlists WHERE user_id = ? AND product_id = ?').run(userId, productId);
     return this.getWishlist(userId);
+  },
+
+  close() {
+    db.close();
   },
 };
