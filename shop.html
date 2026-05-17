@@ -10,7 +10,6 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', system-ui, sans-serif; background: #f5f5f7; }
 
-        /* 顶部公告栏 */
         .announcement-bar {
             background: linear-gradient(90deg, #1a1a2e, #16213e, #0f3460, #16213e, #1a1a2e);
             background-size: 200% 100%;
@@ -21,18 +20,15 @@
             50% { background-position: 100% 50%; }
         }
 
-        /* 导航栏 */
         .nav-glass {
             background: rgba(255,255,255,0.85);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(0,0,0,0.06);
         }
 
-        /* Hero 区域 */
         .hero-gradient {
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
         .hero-gradient::before {
             content: '';
@@ -58,7 +54,6 @@
             66% { transform: translate(-20px, 15px) scale(0.9); }
         }
 
-        /* 产品卡片 */
         .product-card {
             background: #fff;
             border-radius: 16px;
@@ -72,13 +67,12 @@
             box-shadow: 0 24px 60px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.06);
         }
         .product-card .img-wrap {
-            overflow: hidden;
-            position: relative;
+            overflow: hidden; position: relative;
         }
-        .product-card .img-wrap img {
+        .product-card .img-wrap .card-icon {
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .product-card:hover .img-wrap img {
+        .product-card:hover .img-wrap .card-icon {
             transform: scale(1.08);
         }
         .product-card .quick-view {
@@ -86,182 +80,211 @@
             bottom: 12px; left: 50%;
             transform: translateX(-50%) translateY(20px);
             background: rgba(0,0,0,0.75);
-            color: #fff;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            opacity: 0;
-            transition: all 0.3s;
-            pointer-events: none;
-            white-space: nowrap;
+            color: #fff; padding: 8px 20px;
+            border-radius: 20px; font-size: 0.8rem;
+            opacity: 0; transition: all 0.3s;
+            pointer-events: none; white-space: nowrap;
         }
         .product-card:hover .quick-view {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
+            opacity: 1; transform: translateX(-50%) translateY(0);
         }
 
-        /* 标签 */
-        .badge-hot {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: #fff;
-            font-size: 0.7rem;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-        .badge-new {
-            background: linear-gradient(135deg, #0be881, #05c46b);
-            color: #fff;
-            font-size: 0.7rem;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
+        .badge-hot { background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: #fff; font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; font-weight: 600; }
+        .badge-new { background: linear-gradient(135deg, #0be881, #05c46b); color: #fff; font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; font-weight: 600; }
 
-        /* 分类标签 */
         .category-chip {
-            padding: 8px 20px;
-            border-radius: 24px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid #e0e0e0;
-            background: #fff;
-            color: #666;
+            padding: 8px 20px; border-radius: 24px; font-size: 0.85rem;
+            font-weight: 500; cursor: pointer; transition: all 0.3s;
+            border: 1px solid #e0e0e0; background: #fff; color: #666;
         }
         .category-chip:hover, .category-chip.active {
-            background: #1a1a2e;
-            color: #fff;
-            border-color: #1a1a2e;
+            background: #1a1a2e; color: #fff; border-color: #1a1a2e;
         }
 
-        /* 按钮 */
         .btn-primary {
             background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: #fff;
-            padding: 12px 32px;
-            border-radius: 30px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 20px rgba(238,90,36,0.3);
+            color: #fff; padding: 12px 32px; border-radius: 30px;
+            font-weight: 600; border: none; cursor: pointer;
+            transition: all 0.3s; box-shadow: 0 4px 20px rgba(238,90,36,0.3);
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(238,90,36,0.45);
-        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(238,90,36,0.45); }
         .btn-outline {
-            padding: 12px 32px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            background: transparent;
-            border: 2px solid #fff;
-            color: #fff;
-            transition: all 0.3s;
+            padding: 12px 32px; border-radius: 30px; font-weight: 600;
+            cursor: pointer; background: transparent;
+            border: 2px solid #fff; color: #fff; transition: all 0.3s;
         }
-        .btn-outline:hover {
-            background: #fff;
-            color: #1a1a2e;
-        }
+        .btn-outline:hover { background: #fff; color: #1a1a2e; }
+
         .btn-cart {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: #1a1a2e;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #1a1a2e; color: #fff; border: none;
+            cursor: pointer; font-size: 1rem; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center;
         }
-        .btn-cart:hover {
-            background: #ff6b6b;
-            transform: scale(1.1);
-        }
+        .btn-cart:hover { background: #ff6b6b; transform: scale(1.1); }
+        .btn-cart.in-cart { background: #0be881; }
 
-        /* 统计数字 */
         .stat-number {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 800;
+            font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
             background: linear-gradient(135deg, #ff6b6b, #feca57);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
 
-        /* 页脚 */
-        .footer-gradient {
-            background: linear-gradient(180deg, #1a1a2e 0%, #0f0c29 100%);
-        }
+        .footer-gradient { background: linear-gradient(180deg, #1a1a2e 0%, #0f0c29 100%); }
 
-        /* 滚动入场 */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* 品牌走马灯 */
         @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        .marquee-track {
-            display: flex;
-            animation: marquee 25s linear infinite;
-            width: max-content;
+        .marquee-track { display: flex; animation: marquee 25s linear infinite; width: max-content; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 100; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-box {
+            background: #fff; border-radius: 20px; padding: 32px;
+            width: 400px; max-width: 90vw; position: relative;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+        }
+
+        /* Cart sidebar */
+        .cart-sidebar {
+            position: fixed; top: 0; right: -420px; width: 400px; max-width: 90vw;
+            height: 100vh; background: #fff; z-index: 200;
+            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -4px 0 30px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column;
+        }
+        .cart-sidebar.show { right: 0; }
+        .cart-backdrop {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            z-index: 199; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .cart-backdrop.show { opacity: 1; pointer-events: auto; }
+
+        /* Toast */
+        .toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #1a1a2e; color: #fff; padding: 12px 28px;
+            border-radius: 30px; font-size: 0.9rem; z-index: 300;
+            opacity: 0; transition: all 0.4s; pointer-events: none;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+        .toast.show { opacity: 1; top: 30px; }
+
+        /* Loading spinner */
+        .spinner {
+            width: 40px; height: 40px; border: 3px solid #e0e0e0;
+            border-top-color: #ff6b6b; border-radius: 50%;
+            animation: spin 0.6s linear infinite; margin: 40px auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .cart-count-badge {
+            position: absolute; top: -8px; right: -8px;
+            background: #ff6b6b; color: #fff; font-size: 11px;
+            min-width: 20px; height: 20px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
         }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- 顶部公告栏 -->
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Cart backdrop -->
+    <div class="cart-backdrop" id="cartBackdrop" onclick="toggleCart()"></div>
+
+    <!-- Cart sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="flex items-center justify-between p-5 border-b">
+            <h3 class="font-bold text-lg">购物车 <span id="cartCountSide" class="text-red-500">(0)</span></h3>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-gray-700 text-xl">&times;</button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-5" id="cartItems">
+            <p class="text-gray-400 text-center mt-10">购物车是空的</p>
+        </div>
+        <div class="border-t p-5" id="cartFooter" style="display:none">
+            <div class="flex justify-between font-bold text-lg mb-4">
+                <span>合计</span>
+                <span class="text-red-500" id="cartTotal">¥0</span>
+            </div>
+            <button onclick="checkout()" class="btn-primary w-full text-center block">立即结算</button>
+        </div>
+    </div>
+
+    <!-- Login/Register modal -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-box">
+            <button onclick="closeAuth()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">&times;</button>
+            <div class="flex gap-4 mb-6" id="authTabs">
+                <button class="flex-1 py-2 font-semibold border-b-2 border-black" data-tab="login">登录</button>
+                <button class="flex-1 py-2 font-semibold border-b-2 border-transparent text-gray-400" data-tab="register">注册</button>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <input type="text" id="loginUser" placeholder="用户名" class="w-full border rounded-lg px-4 py-3 mb-3" required>
+                <input type="password" id="loginPass" placeholder="密码" class="w-full border rounded-lg px-4 py-3 mb-4" required>
+                <button type="submit" class="btn-primary w-full">登录</button>
+            </form>
+            <form id="registerForm" onsubmit="handleRegister(event)" style="display:none">
+                <input type="text" id="regUser" placeholder="用户名（3-20位）" class="w-full border rounded-lg px-4 py-3 mb-3" required minlength="3">
+                <input type="email" id="regEmail" placeholder="邮箱" class="w-full border rounded-lg px-4 py-3 mb-3" required>
+                <input type="password" id="regPass" placeholder="密码（6-32位）" class="w-full border rounded-lg px-4 py-3 mb-4" required minlength="6">
+                <button type="submit" class="btn-primary w-full">注册</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== TOP BAR ===== -->
     <div class="announcement-bar text-white text-center py-2 text-sm font-medium tracking-wide">
         新用户首单享 9 折优惠 ｜ 满 ¥299 包邮 ｜ 限时新品 8 折起
     </div>
 
-    <!-- 导航栏 -->
+    <!-- ===== NAV ===== -->
     <nav class="nav-glass sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="index.html" class="text-2xl font-extrabold tracking-tight">
+            <a href="#" class="text-2xl font-extrabold tracking-tight" onclick="resetFilters()">
                 <span class="text-red-500">Trend</span><span class="text-gray-900">Shop</span>
             </a>
             <div class="hidden md:flex gap-8 text-sm font-medium text-gray-700">
-                <a href="#" class="hover:text-red-500 transition">首页</a>
-                <a href="#" class="hover:text-red-500 transition">新品上市</a>
-                <a href="#" class="hover:text-red-500 transition">男装</a>
-                <a href="#" class="hover:text-red-500 transition">女装</a>
-                <a href="#" class="hover:text-red-500 transition">配饰</a>
-                <a href="#" class="hover:text-red-500 transition">促销</a>
+                <a href="#" class="hover:text-red-500 transition" onclick="resetFilters()">首页</a>
+                <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('男装')">男装</a>
+                <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('女装')">女装</a>
+                <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('鞋履')">鞋履</a>
+                <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('包包')">包包</a>
+                <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('配饰')">配饰</a>
+                <a href="#" class="hover:text-red-500 transition" onclick="filterCategory('数码')">数码</a>
             </div>
             <div class="flex items-center gap-4">
-                <button class="relative text-gray-700 hover:text-red-500 transition">
+                <button class="relative text-gray-700 hover:text-red-500 transition" onclick="document.getElementById('searchInput').focus();document.getElementById('products').scrollIntoView({behavior:'smooth'})">
                     <i class="fa fa-search text-lg"></i>
                 </button>
-                <button class="relative text-gray-700 hover:text-red-500 transition">
+                <button class="relative text-gray-700 hover:text-red-500 transition" id="wishlistBtn" title="心愿单" onclick="toggleAuthOr('wishlist')">
                     <i class="fa fa-heart-o text-lg"></i>
                 </button>
-                <button class="relative text-gray-700 hover:text-red-500 transition">
+                <button class="relative text-gray-700 hover:text-red-500 transition" onclick="toggleCart()">
                     <i class="fa fa-shopping-bag text-lg"></i>
-                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span>
+                    <span class="cart-count-badge" id="cartBadge" style="display:none">0</span>
                 </button>
-                <a href="index.html" class="text-sm text-gray-400 hover:text-gray-700 transition ml-2">
-                    <i class="fa fa-arrow-left mr-1"></i>返回主页
-                </a>
+                <span id="userArea">
+                    <button class="text-sm text-gray-600 hover:text-red-500 transition font-medium" onclick="openAuth()">
+                        <i class="fa fa-user-circle mr-1"></i>登录
+                    </button>
+                </span>
             </div>
         </div>
     </nav>
 
-    <!-- Hero 区域 -->
+    <!-- ===== HERO ===== -->
     <section class="hero-gradient text-white relative z-10">
         <div class="max-w-7xl mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center gap-12 relative z-10">
             <div class="flex-1 reveal">
@@ -273,22 +296,13 @@
                     精选全球设计师品牌，为你打造独一无二的潮流穿搭
                 </p>
                 <div class="mt-8 flex gap-4">
-                    <button class="btn-primary">立即选购</button>
-                    <button class="btn-outline">查看合集</button>
+                    <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">立即选购</button>
+                    <button class="btn-outline" onclick="filterCategory('女装')">查看合集</button>
                 </div>
                 <div class="mt-10 flex gap-8">
-                    <div>
-                        <div class="stat-number">50K+</div>
-                        <div class="text-gray-400 text-sm mt-1">满意用户</div>
-                    </div>
-                    <div>
-                        <div class="stat-number">200+</div>
-                        <div class="text-gray-400 text-sm mt-1">设计师品牌</div>
-                    </div>
-                    <div>
-                        <div class="stat-number">24h</div>
-                        <div class="text-gray-400 text-sm mt-1">快速发货</div>
-                    </div>
+                    <div><div class="stat-number">50K+</div><div class="text-gray-400 text-sm mt-1">满意用户</div></div>
+                    <div><div class="stat-number">200+</div><div class="text-gray-400 text-sm mt-1">设计师品牌</div></div>
+                    <div><div class="stat-number">24h</div><div class="text-gray-400 text-sm mt-1">快速发货</div></div>
                 </div>
             </div>
             <div class="flex-1 reveal">
@@ -296,7 +310,6 @@
                     <div class="w-full h-80 md:h-96 rounded-3xl bg-gradient-to-br from-red-400/30 via-purple-400/20 to-yellow-300/30 flex items-center justify-center border border-white/10">
                         <i class="fa fa-shopping-bag text-8xl text-white/20"></i>
                     </div>
-                    <!-- 浮动卡片 -->
                     <div class="absolute -bottom-4 -left-4 bg-white/10 backdrop-blur-xl rounded-2xl p-4 border border-white/20 text-sm">
                         <p class="text-white/70 text-xs">今日热销</p>
                         <p class="font-bold text-lg">¥<span class="text-yellow-300">299</span></p>
@@ -312,7 +325,7 @@
         </div>
     </section>
 
-    <!-- 品牌走马灯 -->
+    <!-- ===== BRAND MARQUEE ===== -->
     <section class="py-10 bg-white border-y border-gray-100 overflow-hidden">
         <div class="marquee-track">
             <span class="text-gray-300 text-2xl font-bold mx-10">NIKE</span>
@@ -323,7 +336,6 @@
             <span class="text-gray-300 text-2xl font-bold mx-10">GUCCI</span>
             <span class="text-gray-300 text-2xl font-bold mx-10">PRADA</span>
             <span class="text-gray-300 text-2xl font-bold mx-10">DIOR</span>
-            <!-- 重复 -->
             <span class="text-gray-300 text-2xl font-bold mx-10">NIKE</span>
             <span class="text-gray-300 text-2xl font-bold mx-10">ADIDAS</span>
             <span class="text-gray-300 text-2xl font-bold mx-10">ZARA</span>
@@ -335,214 +347,40 @@
         </div>
     </section>
 
-    <!-- 商品展示 -->
-    <section class="py-16 max-w-7xl mx-auto px-6">
+    <!-- ===== PRODUCTS ===== -->
+    <section class="py-16 max-w-7xl mx-auto px-6" id="products">
         <div class="text-center mb-10 reveal">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">热门商品</h2>
             <p class="text-gray-500 mt-2">为你精选的潮流单品</p>
-        </div>
-
-        <!-- 分类标签 -->
-        <div class="flex flex-wrap justify-center gap-3 mb-10 reveal">
-            <span class="category-chip active">全部</span>
-            <span class="category-chip">男装</span>
-            <span class="category-chip">女装</span>
-            <span class="category-chip">鞋履</span>
-            <span class="category-chip">包包</span>
-            <span class="category-chip">配饰</span>
-            <span class="category-chip">数码</span>
-        </div>
-
-        <!-- 商品卡片 -->
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- 商品 1 -->
-            <div class="product-card reveal">
-                <div class="img-wrap h-56 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                    <i class="fa fa-tshirt text-5xl text-gray-300"></i>
-                    <span class="quick-view">快速查看</span>
-                </div>
-                <div class="p-4">
-                    <span class="badge-hot">热卖</span>
-                    <h3 class="font-semibold mt-2 text-gray-900">经典纯棉T恤 男女同款</h3>
-                    <div class="flex items-center gap-2 mt-1">
-                        <i class="fa fa-star text-yellow-400 text-xs"></i>
-                        <span class="text-xs text-gray-500">4.8 (2.3k)</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div>
-                            <span class="text-lg font-bold text-red-500">¥129</span>
-                            <span class="text-xs text-gray-400 line-through ml-2">¥259</span>
-                        </div>
-                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 商品 2 -->
-            <div class="product-card reveal">
-                <div class="img-wrap h-56 bg-gradient-to-br from-rose-100 to-pink-200 flex items-center justify-center">
-                    <i class="fa fa-shopping-bag text-5xl text-pink-300"></i>
-                    <span class="quick-view">快速查看</span>
-                </div>
-                <div class="p-4">
-                    <span class="badge-new">新品</span>
-                    <h3 class="font-semibold mt-2 text-gray-900">时尚斜挎包 简约百搭</h3>
-                    <div class="flex items-center gap-2 mt-1">
-                        <i class="fa fa-star text-yellow-400 text-xs"></i>
-                        <span class="text-xs text-gray-500">4.9 (856)</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div>
-                            <span class="text-lg font-bold text-red-500">¥199</span>
-                            <span class="text-xs text-gray-400 line-through ml-2">¥399</span>
-                        </div>
-                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 商品 3 -->
-            <div class="product-card reveal">
-                <div class="img-wrap h-56 bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-                    <i class="fa fa-headphones text-5xl text-indigo-300"></i>
-                    <span class="quick-view">快速查看</span>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-semibold mt-2 text-gray-900">无线降噪耳机 Pro</h3>
-                    <div class="flex items-center gap-2 mt-1">
-                        <i class="fa fa-star text-yellow-400 text-xs"></i>
-                        <span class="text-xs text-gray-500">4.7 (1.5k)</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div>
-                            <span class="text-lg font-bold text-red-500">¥599</span>
-                            <span class="text-xs text-gray-400 line-through ml-2">¥899</span>
-                        </div>
-                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 商品 4 -->
-            <div class="product-card reveal">
-                <div class="img-wrap h-56 bg-gradient-to-br from-amber-50 to-yellow-100 flex items-center justify-center">
-                    <i class="fa fa-clock-o text-5xl text-amber-300"></i>
-                    <span class="quick-view">快速查看</span>
-                </div>
-                <div class="p-4">
-                    <span class="badge-hot">限时特惠</span>
-                    <h3 class="font-semibold mt-2 text-gray-900">简约石英腕表 男款</h3>
-                    <div class="flex items-center gap-2 mt-1">
-                        <i class="fa fa-star text-yellow-400 text-xs"></i>
-                        <span class="text-xs text-gray-500">4.9 (3.1k)</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div>
-                            <span class="text-lg font-bold text-red-500">¥899</span>
-                            <span class="text-xs text-gray-400 line-through ml-2">¥1599</span>
-                        </div>
-                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 商品 5 -->
-            <div class="product-card reveal">
-                <div class="img-wrap h-56 bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
-                    <i class="fa fa-sun-o text-5xl text-emerald-300"></i>
-                    <span class="quick-view">快速查看</span>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-semibold mt-2 text-gray-900">复古太阳镜 防紫外线</h3>
-                    <div class="flex items-center gap-2 mt-1">
-                        <i class="fa fa-star text-yellow-400 text-xs"></i>
-                        <span class="text-xs text-gray-500">4.6 (620)</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div>
-                            <span class="text-lg font-bold text-red-500">¥159</span>
-                            <span class="text-xs text-gray-400 line-through ml-2">¥299</span>
-                        </div>
-                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 商品 6 -->
-            <div class="product-card reveal">
-                <div class="img-wrap h-56 bg-gradient-to-br from-purple-50 to-violet-100 flex items-center justify-center">
-                    <i class="fa fa-mobile text-5xl text-violet-300"></i>
-                    <span class="quick-view">快速查看</span>
-                </div>
-                <div class="p-4">
-                    <span class="badge-new">新品</span>
-                    <h3 class="font-semibold mt-2 text-gray-900">磁吸手机壳 防摔保护</h3>
-                    <div class="flex items-center gap-2 mt-1">
-                        <i class="fa fa-star text-yellow-400 text-xs"></i>
-                        <span class="text-xs text-gray-500">4.7 (428)</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div>
-                            <span class="text-lg font-bold text-red-500">¥79</span>
-                            <span class="text-xs text-gray-400 line-through ml-2">¥129</span>
-                        </div>
-                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 商品 7 -->
-            <div class="product-card reveal">
-                <div class="img-wrap h-56 bg-gradient-to-br from-orange-50 to-red-100 flex items-center justify-center">
-                    <i class="fa fa-shoe-prints text-5xl text-orange-300"></i>
-                    <span class="quick-view">快速查看</span>
-                </div>
-                <div class="p-4">
-                    <span class="badge-hot">爆款</span>
-                    <h3 class="font-semibold mt-2 text-gray-900">复古运动鞋 老爹鞋</h3>
-                    <div class="flex items-center gap-2 mt-1">
-                        <i class="fa fa-star text-yellow-400 text-xs"></i>
-                        <span class="text-xs text-gray-500">4.8 (4.2k)</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div>
-                            <span class="text-lg font-bold text-red-500">¥459</span>
-                            <span class="text-xs text-gray-400 line-through ml-2">¥699</span>
-                        </div>
-                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 商品 8 -->
-            <div class="product-card reveal">
-                <div class="img-wrap h-56 bg-gradient-to-br from-cyan-50 to-teal-100 flex items-center justify-center">
-                    <i class="fa fa-camera text-5xl text-teal-300"></i>
-                    <span class="quick-view">快速查看</span>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-semibold mt-2 text-gray-900">微单相机包 防水便携</h3>
-                    <div class="flex items-center gap-2 mt-1">
-                        <i class="fa fa-star text-yellow-400 text-xs"></i>
-                        <span class="text-xs text-gray-500">4.5 (198)</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <div>
-                            <span class="text-lg font-bold text-red-500">¥249</span>
-                            <span class="text-xs text-gray-400 line-through ml-2">¥399</span>
-                        </div>
-                        <button class="btn-cart"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
+            <div class="mt-4 flex justify-center gap-2">
+                <input type="text" id="searchInput" placeholder="搜索商品..." class="border rounded-full px-5 py-2 text-sm w-64 focus:outline-none focus:border-red-400"
+                    oninput="debounceSearch()">
+                <select id="sortSelect" class="border rounded-full px-4 py-2 text-sm text-gray-600 focus:outline-none" onchange="loadProducts()">
+                    <option value="">默认排序</option>
+                    <option value="price-asc">价格从低到高</option>
+                    <option value="price-desc">价格从高到低</option>
+                    <option value="rating">评分最高</option>
+                    <option value="sales">销量最高</option>
+                </select>
             </div>
         </div>
 
-        <div class="text-center mt-10 reveal">
-            <button class="btn-primary text-lg px-10 py-3">查看更多商品</button>
+        <!-- Category chips -->
+        <div class="flex flex-wrap justify-center gap-3 mb-10 reveal" id="categoryChips">
+            <span class="category-chip active" data-cat="">全部</span>
+        </div>
+
+        <!-- Product grid -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="productGrid">
+            <div class="col-span-full"><div class="spinner"></div></div>
+        </div>
+
+        <div class="text-center mt-10 reveal" id="loadMoreWrap">
+            <button class="btn-primary text-lg px-10 py-3" onclick="loadMore()" id="loadMoreBtn">查看更多商品</button>
         </div>
     </section>
 
-    <!-- 特色区域 -->
+    <!-- ===== FEATURES ===== -->
     <section class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid md:grid-cols-3 gap-8 reveal">
@@ -571,7 +409,7 @@
         </div>
     </section>
 
-    <!-- 底部 -->
+    <!-- ===== FOOTER ===== -->
     <footer class="footer-gradient text-white py-12">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid md:grid-cols-4 gap-8">
@@ -612,45 +450,448 @@
                 </div>
             </div>
             <div class="border-t border-white/10 mt-8 pt-8 text-center text-sm text-gray-500">
-                &copy; 2026 TrendShop. All rights reserved. ｜ <a href="index.html" class="hover:text-red-400 transition">返回个人主页</a>
+                &copy; 2026 TrendShop. All rights reserved.
             </div>
         </div>
     </footer>
 
+    <!-- ===== SCRIPTS ===== -->
     <script>
-        // 滚动入场动画
-        (function() {
-            const reveals = document.querySelectorAll('.reveal');
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-            reveals.forEach(el => observer.observe(el));
-        })();
+    // ─── CONFIG ───────────────────────────────────────────────────────────────
+    const API = 'http://localhost:3000/api';
+    let currentPage = 1, currentCategory = '', currentSort = '', currentKeyword = '';
+    let cartOpen = false, userToken = '', userInfo = null;
+    let allCategories = [];
 
-        // 分类标签切换
-        document.querySelectorAll('.category-chip').forEach(chip => {
-            chip.addEventListener('click', function() {
-                document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-            });
+    // ─── HELPERS ──────────────────────────────────────────────────────────────
+
+    function toast(msg) {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(el._t);
+        el._t = setTimeout(() => el.classList.remove('show'), 2000);
+    }
+
+    async function api(url, options = {}) {
+        const headers = { 'Content-Type': 'application/json' };
+        if (userToken) headers['Authorization'] = 'Bearer ' + userToken;
+        const res = await fetch(API + url, { ...options, headers });
+        return res.json();
+    }
+
+    function formatPrice(n) { return '¥' + Number(n).toFixed(0); }
+
+    const iconMap = {
+        tshirt: 'fa-tshirt', bag: 'fa-shopping-bag', headphone: 'fa-headphones',
+        watch: 'fa-clock-o', sunglass: 'fa-sun-o', phonecase: 'fa-mobile',
+        shoe: 'fa-shoe-prints', camera: 'fa-camera', pants: 'fa-tshirt',
+        dress: 'fa-female', totebag: 'fa-briefcase', cap: 'fa-umbrella'
+    };
+    const colorMap = [
+        'from-gray-100 to-gray-200 text-gray-300',
+        'from-rose-100 to-pink-200 text-pink-300',
+        'from-blue-50 to-indigo-100 text-indigo-300',
+        'from-amber-50 to-yellow-100 text-amber-300',
+        'from-green-50 to-emerald-100 text-emerald-300',
+        'from-purple-50 to-violet-100 text-violet-300',
+        'from-orange-50 to-red-100 text-orange-300',
+        'from-cyan-50 to-teal-100 text-teal-300',
+    ];
+
+    function cardGradient(i) { return colorMap[i % colorMap.length]; }
+
+    // ─── AUTH ─────────────────────────────────────────────────────────────────
+
+    function openAuth() { document.getElementById('authModal').classList.add('show'); }
+    function closeAuth() { document.getElementById('authModal').classList.remove('show'); }
+
+    document.getElementById('authTabs').addEventListener('click', function(e) {
+        if (e.target.tagName !== 'BUTTON') return;
+        const isLogin = e.target.dataset.tab === 'login';
+        document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+        document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
+        this.querySelectorAll('button').forEach((b, i) => {
+            b.className = (i === 0 && isLogin) || (i === 1 && !isLogin)
+                ? 'flex-1 py-2 font-semibold border-b-2 border-black'
+                : 'flex-1 py-2 font-semibold border-b-2 border-transparent text-gray-400';
+        });
+    });
+
+    async function handleLogin(e) {
+        e.preventDefault();
+        const username = document.getElementById('loginUser').value;
+        const password = document.getElementById('loginPass').value;
+        const res = await api('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password }),
+        });
+        if (res.code === 200) {
+            userToken = res.data.token;
+            userInfo = res.data.user;
+            localStorage.setItem('trendshop_token', userToken);
+            localStorage.setItem('trendshop_user', JSON.stringify(userInfo));
+            closeAuth();
+            updateUserUI();
+            loadCart();
+            toast('登录成功，欢迎回来！');
+        } else {
+            toast(res.message);
+        }
+    }
+
+    async function handleRegister(e) {
+        e.preventDefault();
+        const username = document.getElementById('regUser').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPass').value;
+        const res = await api('/auth/register', {
+            method: 'POST',
+            body: JSON.stringify({ username, email, password }),
+        });
+        if (res.code === 201) {
+            toast('注册成功，请登录');
+            document.getElementById('authTabs').querySelector('[data-tab="login"]').click();
+            document.getElementById('loginUser').value = username;
+        } else {
+            toast(res.message);
+        }
+    }
+
+    function logout() {
+        userToken = ''; userInfo = null;
+        localStorage.removeItem('trendshop_token');
+        localStorage.removeItem('trendshop_user');
+        updateUserUI();
+        loadCart();
+        toast('已退出登录');
+    }
+
+    function updateUserUI() {
+        const area = document.getElementById('userArea');
+        if (userInfo) {
+            area.innerHTML = `
+                <div class="relative inline-block" id="userMenuWrap">
+                    <button class="text-sm text-gray-700 font-medium hover:text-red-500 transition" onclick="document.getElementById('userDropdown').classList.toggle('hidden')">
+                        <i class="fa fa-user-circle mr-1"></i>${userInfo.username}
+                    </button>
+                    <div id="userDropdown" class="hidden absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border py-2 min-w-[140px] z-50">
+                        <span class="block px-4 py-1 text-xs text-gray-400">${userInfo.role === 'admin' ? '管理员' : '会员'}</span>
+                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-50" onclick="alert('订单功能开发中')">我的订单</button>
+                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 text-red-500" onclick="logout()">退出登录</button>
+                    </div>
+                </div>`;
+        } else {
+            area.innerHTML = `<button class="text-sm text-gray-600 hover:text-red-500 transition font-medium" onclick="openAuth()"><i class="fa fa-user-circle mr-1"></i>登录</button>`;
+        }
+    }
+
+    function toggleAuthOr(action) {
+        if (!userToken) { openAuth(); return; }
+        if (action === 'wishlist') alert('心愿单功能开发中，敬请期待！');
+    }
+
+    // Close dropdown on outside click
+    document.addEventListener('click', function(e) {
+        const dd = document.getElementById('userDropdown');
+        if (dd && !dd.classList.contains('hidden') && !e.target.closest('#userMenuWrap')) {
+            dd.classList.add('hidden');
+        }
+    });
+
+    // ─── PRODUCTS ─────────────────────────────────────────────────────────────
+
+    async function loadProducts(append = false) {
+        if (!append) {
+            currentPage = 1;
+            document.getElementById('productGrid').innerHTML = '<div class="col-span-full"><div class="spinner"></div></div>';
+        }
+
+        const params = new URLSearchParams({ page: currentPage, pageSize: 12 });
+        if (currentCategory) params.set('category', currentCategory);
+        if (currentKeyword) params.set('keyword', currentKeyword);
+        if (currentSort) params.set('sort', currentSort);
+
+        const res = await api('/products?' + params.toString());
+        if (res.code !== 200) return;
+
+        const { list, pagination } = res.data;
+        const grid = document.getElementById('productGrid');
+
+        if (!append) grid.innerHTML = '';
+        if (list.length === 0 && !append) {
+            grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10">没有找到商品</div>';
+        }
+
+        list.forEach((p, i) => {
+            const icon = iconMap[p.image] || 'fa-cube';
+            const gradient = cardGradient(p.id);
+            const card = document.createElement('div');
+            card.className = 'product-card reveal';
+            card.innerHTML = `
+                <div class="img-wrap h-56 bg-gradient-to-br ${gradient} flex items-center justify-center">
+                    <i class="fa ${icon} text-5xl card-icon"></i>
+                    <span class="quick-view">快速查看</span>
+                </div>
+                <div class="p-4">
+                    ${p.badge ? `<span class="${p.badgeType === 'new' ? 'badge-new' : 'badge-hot'}">${p.badge}</span>` : ''}
+                    <h3 class="font-semibold mt-2 text-gray-900">${p.name}</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fa fa-star text-yellow-400 text-xs"></i>
+                        <span class="text-xs text-gray-500">${p.rating} (${p.reviews >= 1000 ? (p.reviews/1000).toFixed(1)+'k' : p.reviews})</span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <div>
+                            <span class="text-lg font-bold text-red-500">${formatPrice(p.price)}</span>
+                            ${p.originalPrice > p.price ? `<span class="text-xs text-gray-400 line-through ml-2">${formatPrice(p.originalPrice)}</span>` : ''}
+                        </div>
+                        <button class="btn-cart" onclick="addToCart(${p.id}, this)" title="加入购物车"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>`;
+            grid.appendChild(card);
         });
 
-        // 购物车按钮点击动画
-        document.querySelectorAll('.btn-cart').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.innerHTML = '<i class="fa fa-check"></i>';
-                this.style.background = '#0be881';
+        // Handle load more button
+        const loadWrap = document.getElementById('loadMoreWrap');
+        if (pagination.page >= pagination.totalPages) {
+            loadWrap.style.display = 'none';
+        } else {
+            loadWrap.style.display = '';
+        }
+
+        // Re-trigger reveal animations
+        setTimeout(() => {
+            document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+            });
+        }, 100);
+
+        // Update cart button states
+        updateCartButtonStates();
+    }
+
+    function loadMore() {
+        currentPage++;
+        loadProducts(true);
+    }
+
+    async function loadCategories() {
+        const res = await api('/products/categories');
+        if (res.code !== 200) return;
+        allCategories = res.data;
+        const container = document.getElementById('categoryChips');
+        container.innerHTML = '<span class="category-chip active" data-cat="" onclick="filterCategory(\'\')">全部</span>';
+        allCategories.forEach(cat => {
+            const chip = document.createElement('span');
+            chip.className = 'category-chip';
+            chip.textContent = cat;
+            chip.dataset.cat = cat;
+            chip.onclick = () => filterCategory(cat);
+            container.appendChild(chip);
+        });
+    }
+
+    function filterCategory(cat) {
+        currentCategory = cat;
+        document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+        const chip = document.querySelector(`[data-cat="${cat}"]`);
+        if (chip) chip.classList.add('active');
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        loadProducts();
+    }
+
+    function resetFilters() {
+        currentCategory = ''; currentKeyword = ''; currentSort = '';
+        document.getElementById('searchInput').value = '';
+        document.getElementById('sortSelect').value = '';
+        document.querySelectorAll('.category-chip').forEach((c, i) => c.classList.toggle('active', i === 0));
+        loadProducts();
+    }
+
+    let searchTimer;
+    function debounceSearch() {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+            currentKeyword = document.getElementById('searchInput').value.trim();
+            loadProducts();
+        }, 400);
+    }
+
+    // ─── CART ─────────────────────────────────────────────────────────────────
+
+    function toggleCart() {
+        cartOpen = !cartOpen;
+        document.getElementById('cartSidebar').classList.toggle('show', cartOpen);
+        document.getElementById('cartBackdrop').classList.toggle('show', cartOpen);
+        if (cartOpen) loadCart();
+    }
+
+    async function loadCart() {
+        if (!userToken) {
+            renderCart({ items: [], total: 0, count: 0 });
+            return;
+        }
+        const res = await api('/cart');
+        if (res.code === 200) renderCart(res.data);
+    }
+
+    function renderCart(cart) {
+        const itemsEl = document.getElementById('cartItems');
+        const footerEl = document.getElementById('cartFooter');
+        const totalEl = document.getElementById('cartTotal');
+        const countSide = document.getElementById('cartCountSide');
+        const badge = document.getElementById('cartBadge');
+
+        countSide.textContent = `(${cart.count})`;
+        if (cart.count > 0) {
+            badge.textContent = cart.count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+
+        if (cart.items.length === 0) {
+            itemsEl.innerHTML = '<p class="text-gray-400 text-center mt-10">购物车是空的</p>';
+            footerEl.style.display = 'none';
+        } else {
+            itemsEl.innerHTML = cart.items.map(item => `
+                <div class="flex gap-3 mb-4 pb-4 border-b">
+                    <div class="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fa ${iconMap[item.image] || 'fa-cube'} text-2xl text-gray-400"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-sm truncate">${item.name}</p>
+                        <p class="text-red-500 font-bold">${formatPrice(item.price)}</p>
+                        <div class="flex items-center gap-2 mt-1">
+                            <button class="w-6 h-6 rounded-full border text-xs" onclick="updateCartQty(${item.productId}, ${item.quantity - 1})">-</button>
+                            <span class="text-sm">${item.quantity}</span>
+                            <button class="w-6 h-6 rounded-full border text-xs" onclick="updateCartQty(${item.productId}, ${item.quantity + 1})">+</button>
+                            <button class="ml-auto text-gray-400 hover:text-red-500 text-xs" onclick="updateCartQty(${item.productId}, 0)"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            footerEl.style.display = '';
+            totalEl.textContent = formatPrice(cart.total);
+        }
+        updateCartButtonStates();
+    }
+
+    async function addToCart(productId, btn) {
+        if (!userToken) { openAuth(); toast('请先登录'); return; }
+        const res = await api('/cart', {
+            method: 'POST',
+            body: JSON.stringify({ productId, quantity: 1 }),
+        });
+        if (res.code === 200) {
+            loadCart();
+            // Button animation
+            if (btn) {
+                btn.classList.add('in-cart');
+                btn.innerHTML = '<i class="fa fa-check"></i>';
                 setTimeout(() => {
-                    this.innerHTML = '<i class="fa fa-plus"></i>';
-                    this.style.background = '#1a1a2e';
-                }, 800);
+                    btn.classList.remove('in-cart');
+                    btn.innerHTML = '<i class="fa fa-plus"></i>';
+                    updateCartButtonStates();
+                }, 1000);
+            }
+            toast('已添加到购物车');
+        } else {
+            toast(res.message);
+        }
+    }
+
+    async function updateCartQty(productId, quantity) {
+        const res = await api('/cart/' + productId, {
+            method: 'PUT',
+            body: JSON.stringify({ quantity }),
+        });
+        if (res.code === 200) loadCart();
+    }
+
+    async function checkout() {
+        if (!userToken) return;
+        const res = await api('/orders', {
+            method: 'POST',
+            body: JSON.stringify({
+                items: [], // Will be filled from cart
+                address: userInfo?.profile?.address || '请填写收货地址',
+                note: '',
+            }),
+        });
+
+        // Actually, we need cart items. Let's get the cart first and submit.
+        const cartRes = await api('/cart');
+        if (cartRes.code !== 200 || cartRes.data.items.length === 0) {
+            toast('购物车为空');
+            return;
+        }
+
+        const orderRes = await api('/orders', {
+            method: 'POST',
+            body: JSON.stringify({
+                items: cartRes.data.items.map(i => ({ productId: i.productId, quantity: i.quantity })),
+                address: prompt('请输入收货地址：', '北京市朝阳区xxx路xx号') || '未填写',
+                note: prompt('订单备注（可选）：', '') || '',
+            }),
+        });
+
+        if (orderRes.code === 201) {
+            loadCart();
+            toggleCart();
+            loadProducts(); // Refresh stock
+            toast('下单成功！订单号：' + orderRes.data.id);
+        } else {
+            toast(orderRes.message);
+        }
+    }
+
+    function updateCartButtonStates() {
+        // This updates the "+" buttons to show check if the product is in cart
+        if (!userToken) return;
+        api('/cart').then(res => {
+            if (res.code !== 200) return;
+            const cartIds = new Set(res.data.items.map(i => i.productId));
+            document.querySelectorAll('.btn-cart').forEach(btn => {
+                const onclick = btn.getAttribute('onclick') || '';
+                const match = onclick.match(/addToCart\((\d+)/);
+                if (match && cartIds.has(parseInt(match[1]))) {
+                    btn.classList.add('in-cart');
+                }
             });
         });
-    </script>
+    }
 
+    // ─── INIT ─────────────────────────────────────────────────────────────────
+
+    function init() {
+        // Restore auth
+        const savedToken = localStorage.getItem('trendshop_token');
+        const savedUser = localStorage.getItem('trendshop_user');
+        if (savedToken && savedUser) {
+            userToken = savedToken;
+            try { userInfo = JSON.parse(savedUser); } catch { userInfo = null; }
+        }
+        updateUserUI();
+        loadCategories();
+        loadProducts();
+        loadCart();
+
+        // Scroll reveal
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Modal close on overlay click
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAuth();
+        });
+    }
+
+    init();
+    </script>
 </body>
 </html>
