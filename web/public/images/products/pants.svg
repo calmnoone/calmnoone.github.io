@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#2b5876"/><stop offset="100%" style="stop-color:#4e4376"/></linearGradient></defs>
+  <rect width="400" height="400" fill="url(#bg)"/>
+  <text x="200" y="180" text-anchor="middle" font-size="80" fill="#fff" opacity="0.9">👖</text>
+  <text x="200" y="280" text-anchor="middle" font-size="22" fill="#fff" font-weight="bold">休闲束脚运动裤</text>
+  <text x="200" y="320" text-anchor="middle" font-size="16" fill="#fff" opacity="0.7">男款 · ¥179</text>
+</svg>
